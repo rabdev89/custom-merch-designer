@@ -1,0 +1,92 @@
+{
+  "products": [
+    {
+      "id": "jacket",
+      "name": "Jacket with no sleeves",
+      "type": "apparel",
+      
+      "basePrice": 19.99,
+      "image": "/projects/test/products/Jacket/Jacket-Back.png",
+      "variants": {
+        "colors": [],
+        "sizes": ["XS", "S", "M", "L", "XL", "XXL"]
+      },
+      "customizablePositions": [
+        {
+          "id": "front-center",
+          "name": "Front Center",
+          "maxWidth": 12,
+          "maxHeight": 14,
+          "previewCoords": { "x": 50, "y": 50 },
+          "image": "/projects/test/products/Jacket/Jacket-Front.png"
+        },
+        {
+          "id": "back-full",
+          "name": "Back Full",
+          "maxWidth": 14,
+          "maxHeight": 16,
+          "previewCoords": { "x": 50, "y": 50 },
+          "image": "/projects/test/products/Jacket/Jacket-Back.png"
+        }
+        
+      ]
+    },
+    {
+      "id": "hoodie",
+      "name": "Hoodie",
+      "type": "apparel",
+      "basePrice": 29.99,
+      "image": "/projects/test/products/Hoodie/Hoodie-Front.png",
+      "variants": {
+        "colors": [],
+        "sizes": ["S", "M", "L", "XL", "XXL"]
+      },
+      "customizablePositions": [
+        {
+          "id": "front-hoodie",
+          "name": "Front View",
+          "maxWidth": 12,
+          "maxHeight": 14,
+          "previewCoords": { "x": 50, "y": 50 },
+          "image": "/projects/test/products/Hoodie/Hoodie-Front.png"
+        },
+        {
+          "id": "back-hoodie",
+          "name": "Back View",
+          "maxWidth": 14,
+          "maxHeight": 16,
+          "previewCoords": { "x": 50, "y": 50 },
+          "image": "/projects/test/products/Hoodie/Hoodie-Back.png"
+        },
+        {
+          "id": "left-hoodie",
+          "name": "Left View",
+          "maxWidth": 4,
+          "maxHeight": 3050,
+          "previewCoords": { "x": 49, "y": 49 },
+          "image": "/projects/test/products/Hoodie/Hoodie-Left.png"
+        }
+      ]
+    },
+    {
+      "id": "tote",
+      "name": "Tote Bag",
+      "type": "bag",
+      "basePrice": 14.99,
+      "image": "/projects/test/products/ToteBag/ToteBag.png",
+      "variants": {
+        "colors": []
+      },
+      "customizablePositions": [
+        {
+          "id": "front-tote",
+          "name": "Front View",
+          "maxWidth": 10,
+          "maxHeight": 10,
+          "previewCoords": { "x": 50, "y": 65 },
+          "image": "/projects/test/products/ToteBag/ToteBag.png"
+        }
+      ]
+    }
+  ]
+}

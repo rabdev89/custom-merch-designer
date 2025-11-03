@@ -1,0 +1,167 @@
+{
+  "products": [
+    {
+      "id": "tshirt",
+      "name": "Classic T-Shirt",
+      "type": "apparel",
+      "basePrice": 19.99,
+      "image": "/projects/test/products/Tshirts/Tshirt.png",
+      "variants": {
+        "colors": [  
+          { "id": "dark-blue", "name": "Dark Blue", "hex": "#2C6281", "image": "/projects/test/products/Tshirts/DarkBlue_Front.png" },
+          { "id": "maroon", "name": "Maroon", "hex": "#890B2B", "image": "/projects/test/products/Tshirts/Maroon_Front.png" },
+          { "id": "gray", "name": "Gray", "hex": "#6b7280", "image": "/projects/test/products/Tshirts/Tshirt_Gray.png" },
+          { "id": "orchid", "name": "Orchid", "hex": "#C1376F", "image": "/projects/test/products/Tshirts/Orchid_Front.png" }
+      
+        ],
+        "sizes": ["XS", "S", "M", "L", "XL", "XXL"]
+      },
+      "customizablePositions": [
+        {
+          "id": "front-center",
+          "name": "Front Center",
+          "maxWidth": 12,
+          "maxHeight": 14,
+          "previewCoords": { "x": 50, "y": 50 },
+          "previewImage": "/projects/test/positions/tshirt/front-center.png"
+        },
+        {
+          "id": "back-full",
+          "name": "Back Full",
+          "maxWidth": 14,
+          "maxHeight": 16,
+          "previewCoords": { "x": 50, "y": 50 },
+          "previewImage": "/projects/test/positions/tshirt/Tshirt_Gray_Back.png"
+        },
+        {
+          "id": "left-chest",
+          "name": "Left Chest",
+          "maxWidth": 4,
+          "maxHeight": 4,
+          "previewCoords": { "x": 30, "y": 30 },
+          "previewImage": "/projects/test/positions/tshirt/Tshirt_Gray_Left.png"
+        },
+        {
+          "id": "right-sleeve",
+          "name": "Right Sleeve",
+          "maxWidth": 3,
+          "maxHeight": 3,
+          "previewCoords": { "x": 80, "y": 40 },
+          "previewImage": "/projects/test/positions/tshirt/right-sleeve.png"
+        }
+      ]
+    },
+    {
+      "id": "hoodie",
+      "name": "Hoodie",
+      "type": "apparel",
+      "basePrice": 29.99,
+      "image": "/projects/test/products/Hoodie/Hoodie-Front.png",
+      "variants": {
+        "colors": [
+          { "id": "black", "name": "Black", "hex": "#111827", "image": "/projects/test/products/Hoodie_black.png" },
+          { "id": "navy", "name": "Navy", "hex": "#0f172a", "image": "/projects/test/products/Hoodie_navy.png" },
+          { "id": "olive", "name": "Olive", "hex": "#556b2f", "image": "/projects/test/products/Hoodie_olive.png" }
+        ],
+        "sizes": ["S", "M", "L", "XL", "XXL"]
+      },
+      "customizablePositions": [
+        {
+          "id": "front-center",
+          "name": "Front Center",
+          "maxWidth": 12,
+          "maxHeight": 14,
+          "previewCoords": { "x": 50, "y": 50 },
+          "previewImage": "/projects/test/positions/hoodie/front-center.png"
+        },
+        {
+          "id": "back-full",
+          "name": "Back Full",
+          "maxWidth": 14,
+          "maxHeight": 16,
+          "previewCoords": { "x": 50, "y": 50 },
+          "previewImage": "/projects/test/positions/hoodie/back-full.png"
+        },
+        {
+          "id": "hood",
+          "name": "Hood",
+          "maxWidth": 4,
+          "maxHeight": 2,
+          "previewCoords": { "x": 50, "y": 10 },
+          "previewImage": "/projects/test/positions/hoodie/hood.png"
+        }
+      ]
+    },
+    {
+      "id": "tote",
+      "name": "Tote Bag",
+      "type": "bag",
+      "basePrice": 14.99,
+      "image": "/projects/test/products/ToteBag/ToteBag.png",
+      "variants": {
+        "colors": [
+          { "id": "natural", "name": "Natural", "hex": "#f7f3ea", "image": "/projects/test/products/Tote_natural.png" },
+          { "id": "black", "name": "Black", "hex": "#111827", "image": "/projects/test/products/Tote_black.png" }
+        ]
+      },
+      "customizablePositions": [
+        {
+          "id": "front-center",
+          "name": "Front Center",
+          "maxWidth": 10,
+          "maxHeight": 10,
+          "previewCoords": { "x": 50, "y": 50 },
+          "previewImage": "/projects/test/positions/tote/front-center.png"
+        },
+        {
+          "id": "pocket",
+          "name": "Front Pocket",
+          "maxWidth": 4,
+          "maxHeight": 4,
+          "previewCoords": { "x": 50, "y": 70 },
+          "previewImage": "/projects/test/positions/tote/pocket.png"
+        }
+      ]
+    },
+    {
+      "id": "cap",
+      "name": "Cap",
+      "type": "headwear",
+      "basePrice": 16.99,
+      "image": "/projects/test/products/Cap/Cap.png",
+      "variants": {
+        "colors": [
+          { "id": "black", "name": "Black", "hex": "#111827", "image": "/projects/test/products/Cap_black.png" },
+          { "id": "navy", "name": "Navy", "hex": "#0f172a", "image": "/projects/test/products/Cap_navy.png" },
+          { "id": "khaki", "name": "Khaki", "hex": "#bdb76b", "image": "/projects/test/products/Cap_khaki.png" }
+        ]
+      },
+      "customizablePositions": [
+        {
+          "id": "front",
+          "name": "Front Panel",
+          "maxWidth": 4,
+          "maxHeight": 3,
+          "previewCoords": { "x": 50, "y": 50 },
+          "previewImage": "/projects/test/positions/cap/front.png"
+        },
+        {
+          "id": "side",
+          "name": "Side",
+          "maxWidth": 2,
+          "maxHeight": 2,
+          "previewCoords": { "x": 80, "y": 50 },
+          "previewImage": "/projects/test/positions/cap/side.png"
+        },
+        {
+          "id": "back",
+          "name": "Back",
+          "maxWidth": 3,
+          "maxHeight": 2,
+          "previewCoords": { "x": 50, "y": 50 },
+          "previewImage": "/projects/test/positions/cap/back.png"
+        }
+      ]
+    }
+  ]
+}

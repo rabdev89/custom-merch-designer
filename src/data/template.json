@@ -1,0 +1,103 @@
+{
+  "templatesByProduct": {
+    "tshirt": [
+      {
+        "id": "tshirt_gorilla_steampunk",
+        "name": "Gorilla Steampunk",
+        "event": "Festival",
+        "canColor": false,
+        "image": "/projects/test/products/Tshirts/template/Gorilla_Steampunk_Vector_Illustration1_generated.png"
+      },
+      {
+        "id": "tshirt_smoking_monkey",
+        "name": "Smoking Monkey",
+        "event": "Casual",
+        "canColor": true,
+        "image": "/projects/test/products/Tshirts/template/smoking-moneky-1.png"
+      },
+      {
+        "id": "tshirt_summer_vibes",
+        "name": "Summer Vibes",
+        "event": "Festival",
+        "canColor": true,
+        "image": "/projects/test/products/Tshirts/template/Summer_Vibes.png"
+      },
+      {
+        "id": "tshirt_happy_monkey",
+        "name": "Happy Monkey",
+        "event": "Casual",
+        "canColor": false,
+        "image": "/projects/test/products/Tshirts/template/vecteezy_happy-monkey-head-illustration-for-t-shirt-design-and-print_.png"
+      }
+    ],
+    "hoodie": [
+      {
+        "id": "hoodie_gorilla_badge",
+        "name": "Gorilla Badge",
+        "event": "Festival",
+        "canColor": false,
+        "image": "/projects/test/template/Hoodies/Gorilla_Badge.jpg"
+      },
+      {
+        "id": "hoodie_smoke_patch",
+        "name": "Smoke Patch",
+        "event": "Casual",
+        "canColor": true,
+        "image": "/projects/test/template/Hoodies/smoking-patch.jpg"
+      },
+      {
+        "id": "hoodie_minimal_text",
+        "name": "Minimal Text",
+        "event": "Corporate",
+        "canColor": true,
+        "image": "/projects/test/template/Hoodies/minimal-text.png"
+      }
+    ],
+    "tote": [
+      {
+        "id": "tote_sunburst",
+        "name": "Sunburst",
+        "event": "Festival",
+        "canColor": true,
+        "image": "/projects/test/template/Totes/sunburst.png"
+      },
+      {
+        "id": "tote_leaf",
+        "name": "Leaf Emblem",
+        "event": "Casual",
+        "canColor": false,
+        "image": "/projects/test/template/Totes/leaf.png"
+      },
+      {
+        "id": "tote_happy_monkey",
+        "name": "Happy Monkey",
+        "event": "Casual",
+        "canColor": false,
+        "image": "/projects/test/template/Tshirts/vecteezy_happy-monkey-head-illustration-for-t-shirt-design-and-print_.jpg"
+      }
+    ],
+    "cap": [
+      {
+        "id": "cap_shield",
+        "name": "Team Shield",
+        "event": "Sports",
+        "canColor": true,
+        "image": "/projects/test/template/Caps/team-shield.png"
+      },
+      {
+        "id": "cap_star",
+        "name": "Star Icon",
+        "event": "Casual",
+        "canColor": true,
+        "image": "/projects/test/template/Caps/star-icon.png"
+      },
+      {
+        "id": "cap_monkey_small",
+        "name": "Monkey Head Small",
+        "event": "Casual",
+        "canColor": false,
+        "image": "/projects/test/template/Caps/monkey-small.jpg"
+      }
+    ]
+  }
+}

@@ -1,0 +1,214 @@
+{
+  "templatesByProduct": {
+    "jacket": [
+      {
+        "id": "jacket_urban_patch",
+        "name": "aptos-logo-1",
+        "event": "Casual",
+        "canColor": false,
+        "canAddText": false,
+        "positions": [
+          "front-center"
+        ],
+        "maxWidth": 2,
+        "maxHeight": 2,
+        "previewCoords": { "x": 58, "y": 33},
+        "image": "/projects/test/templates/aptos-logo-1.png"
+      },
+      {
+        "id": "jacket_full_back_art",
+        "name": "aptos-logo-2",
+        "event": "Festival",
+        "canColor": true,
+        "canAddText": false,
+        "positions": [
+          "back-full"
+        ],
+        "maxWidth": 10,
+        "maxHeight": 10,
+        "previewCoords": { "x": 50, "y": 35},
+        "image": "/projects/test/templates/aptos-logo-2.png"
+      },
+      {
+        "id": "jacket_mono_logo",
+        "name": "aptos-logo-3",
+        "event": "Corporate",
+        "canColor": true,
+        "canAddText": false,
+        "positions": [
+          "front-center"
+        ],
+        "maxWidth": 2,
+        "maxHeight": 2,
+        "previewCoords": { "x": 58, "y": 33},
+        "image": "/projects/test/templates/aptos-logo-3.png"
+      },
+      {
+        "id": "jacket_mono_logo",
+        "name": "aptos-logo-3",
+        "event": "Corporate",
+        "canColor": true,
+        "canAddText": false,
+        "positions": [
+          "back-full"
+        ],
+        "maxWidth": 10,
+        "maxHeight": 10,
+        "previewCoords": { "x": 50, "y": 35},
+        "image": "/projects/test/templates/aptos-logo-3.png"
+      }
+    ],
+    "hoodie": [
+      {
+        "id": "hoodies-aptos-logo-1",
+        "name": "aptos-logo-1",
+        "event": "Festival",
+        "canColor": false,
+        "canAddText": false,
+        "positions": [
+          "front-hoodie"
+        ],
+        "maxWidth": 2,
+        "maxHeight": 10,
+        "previewCoords": { "x": 55, "y": 33},
+        "image": "/projects/test/templates/aptos-logo-1.png"
+      },
+      {
+        "id": "hoodies-aptos-logo-1",
+        "name": "aptos-logo-1",
+        "event": "Festival",
+        "canColor": false,
+        "canAddText": true,
+        "positions": [
+          "back-hoodie"
+        ],
+        "maxWidth": 7,
+        "maxHeight": 14,
+        "previewCoords": { "x": 50, "y": 40 },
+        "image": "/projects/test/templates/aptos-logo-1.png"
+      },
+      {
+        "id": "hoodies-aptos-logo-2",
+        "name": "aptos-logo-2",
+        "event": "Corporate",
+        "canColor": true,
+        "canAddText": false,
+        "positions": [
+          "front-hoodie"
+        ],
+        "maxWidth": 2,
+        "maxHeight": 10,
+        "previewCoords": { "x": 55, "y": 33},
+        "image": "/projects/test/templates/aptos-logo-2.png"
+      },
+
+      {
+        "id": "hoodies-aptos-logo-2",
+        "name": "aptos-logo-2",
+        "event": "Corporate",
+        "canColor": true,
+        "canAddText": true,
+        "positions": [
+          "back-hoodie"
+        ],
+        "maxWidth": 12,
+        "maxHeight": 10,
+        "previewCoords": { "x": 50, "y": 45 },
+        "image": "/projects/test/templates/aptos-logo-2.png"
+      },
+
+      {
+        "id": "hoodies-aptos-logo-3",
+        "name": "aptos-logo-3",
+        "event": "Corporate",
+        "canColor": true,
+        "canAddText": false,
+        "positions": [
+          "back-hoodie",
+          "front-hoodie"
+        ],
+        "image": "/projects/test/templates/aptos-logo-3.png"
+      },
+      {
+        "id": "hoodie-aptos-logo-sleeves-2",
+        "name": "aptos-logo-sleeves-2",
+        "event": "Casual",
+        "canColor": true,
+        "canAddText": false,
+        "positions": [
+          "left-hoodie"
+        ],
+        "maxWidth": 12,
+        "maxHeight": 14,
+        "previewCoords": { "x": 50, "y": 50 },
+        "image": "/projects/test/templates/aptos-logo-sleeves-2.png"
+      },
+      {
+        "id": "hoodie-aptos-logo-sleeves",
+        "name": "aptos-logo-sleeves-3",
+        "event": "Casual",
+        "canColor": true,
+        "canAddText": false,
+        "positions": [
+          "left-hoodie"
+        ],
+        "image": "/projects/test/templates/aptos-logo-sleeves.png"
+      },
+      {
+        "id": "hoodies-no-noise",
+        "name": "no_noise",
+        "event": "Corporate",
+        "canColor": true,
+        "canAddText": true,
+        "positions": [
+          "back-hoodie"
+        ],
+        "image": "/projects/test/templates/no_noise.png"
+      }
+    ],
+    "tote": [
+      {
+        "id": "tote_sunburst",
+        "name": "aptos-logo-1",
+        "event": "Festival",
+        "canColor": true,
+        "canAddText": true,
+        "positions": [
+          "front-tote"
+        ],
+        "maxWidth": 9,
+        "maxHeight": 14,
+        "previewCoords": { "x": 50, "y": 65 },
+        "image": "/projects/test/templates/aptos-logo-1.png"
+      },
+      {
+        "id": "tote_leaf",
+        "name": "aptos-logo-2",
+        "event": "Casual",
+        "canColor": false,
+        "canAddText": true,
+        "positions": [
+          "front-tote"
+        ],
+        "maxWidth": 12,
+        "maxHeight": 14,
+        "previewCoords": { "x": 50, "y": 65 },
+        "image": "/projects/test/templates/aptos-logo-2.png"
+      },
+      {
+        "id": "tote_happy_monkey",
+        "name": "aptos-logo-3",
+        "event": "Casual",
+        "canColor": false,
+        "canAddText": true,
+        "positions": [
+          "front-tote"
+        ],
+        "maxWidth": 12,
+        "maxHeight": 14,
+        "previewCoords": { "x": 50, "y": 70 },
+        "image": "/projects/test/templates/aptos-logo-3.png"
+      }
+    ]
+  }
+}
