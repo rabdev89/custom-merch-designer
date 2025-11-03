@@ -44,225 +44,22 @@ const ICON_LIBRARY = [
 ];
 
 
-// --- Small components ---
-function HeroPag2({ onStartCreating }) {
-  return (
-    <div style={{
-      minHeight: '100vh',
-      // combine decorative radial gradient with a full-bleed background image
-      background: `radial-gradient(ellipse at top, #0f172a 0%, #1e293b 50%, #0f172a 100%), url('/assets/1714677703-meta.avif') center/cover no-repeat`,
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      position: 'relative',
-      overflow: 'hidden'
-    }}>
-      {/* Enhanced animated elements */}
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
-
-        .hero-glow { position: absolute; border-radius: 50%; filter: blur(80px); pointer-events: none; }
-        .hero-glow.g1 { width: 600px; height: 600px; left: -200px; top: -200px; background: radial-gradient(circle, rgba(139,92,246,0.3) 0%, transparent 70%); animation: pulse 8s ease-in-out infinite; }
-        .hero-glow.g2 { width: 500px; height: 500px; right: -150px; bottom: -150px; background: radial-gradient(circle, rgba(236,72,153,0.3) 0%, transparent 70%); animation: pulse 10s ease-in-out infinite 2s; }
-        .hero-glow.g3 { width: 400px; height: 400px; left: 50%; top: 50%; transform: translate(-50%, -50%); background: radial-gradient(circle, rgba(59,130,246,0.2) 0%, transparent 70%); animation: pulse 12s ease-in-out infinite 4s; }
-
-        @keyframes pulse { 0%, 100% { opacity: 0.3; transform: scale(1); } 50% { opacity: 0.6; transform: scale(1.1); } }
-
-        /* Animated grid background */
-        .grid-bg {
-          position: absolute;
-          inset: 0;
-          background-image: 
-            linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
-          background-size: 50px 50px;
-          animation: gridMove 20s linear infinite;
-        }
-        @keyframes gridMove { 0% { transform: translate(0, 0); } 100% { transform: translate(50px, 50px); } }
-
-        /* Responsive hero container */
-        .hero-container {
-          max-width: 1200px;
-          margin: 0 auto;
-          padding: 40px 24px;
-          text-align: center;
-          position: relative;
-          z-index: 2;
-        }
-
-        /* Logo animation */
-        @keyframes logoReveal { 
-          0% { opacity: 0; transform: translateY(-20px) scale(0.9); }
-          100% { opacity: 1; transform: translateY(0) scale(1); }
-        }
-
-        .hero-logo { font-size: 56px; font-weight: 900; letter-spacing: -3px; display: inline-flex; align-items: center; gap: 6px; }
-        .hero-sub { font-size: 14px; font-weight: 500; color: rgba(139,92,246,0.8); text-transform: uppercase; letter-spacing: 4px; margin-top: 8px; }
-
-        /* Heading and copy responsive sizes */
-        .hero-heading { font-size: 64px; font-weight: 800; line-height: 1.08; margin-bottom: 24px; }
-        .hero-subcopy { font-size: 20px; color: rgba(255,255,255,0.75); margin-bottom: 48px; max-width: 680px; margin-left: auto; margin-right: auto; }
-
-        /* CTA button enhanced and responsive */
-        .cta-modern {
-          position: relative;
-          background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
-          color: white;
-          border: none;
-          padding: 20px 56px;
-          font-size: 18px;
-          font-weight: 600;
-          border-radius: 999px;
-          cursor: pointer;
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-          box-shadow: 0 0 0 0 rgba(139, 92, 246, 0), 0 10px 40px -10px rgba(139, 92, 246, 0.5);
-          transform: translateY(0);
-        }
-        .cta-modern::before { content: ''; position: absolute; inset: -2px; border-radius: 999px; padding: 2px; background: linear-gradient(135deg, #8b5cf6, #ec4899); -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite: xor; mask-composite: exclude; opacity: 0; transition: opacity 0.3s; }
-        .cta-modern:hover { transform: translateY(-2px); box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.2), 0 20px 60px -10px rgba(139, 92, 246, 0.6); }
-        .cta-modern:hover::before { opacity: 1; }
-
-        /* Feature cards */
-        .feature-card { background: rgba(255,255,255,0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 24px; transition: all 0.3s ease; }
-        .feature-card:hover { background: rgba(255,255,255,0.06); border-color: rgba(139,92,246,0.3); transform: translateY(-4px); }
-
-        .feature-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; max-width: 900px; margin: 0 auto; }
-
-        /* Tablet/iPad */
-        @media (max-width: 1024px) {
-          .hero-heading { font-size: 48px; }
-          .hero-logo { font-size: 48px; }
-          .feature-grid { grid-template-columns: repeat(2, 1fr); }
-        }
-
-        /* Mobile */
-        @media (max-width: 640px) {
-          .hero-heading { font-size: 28px; }
-          .hero-subcopy { font-size: 16px; padding: 0 8px; }
-          .cta-modern { padding: 14px 28px; font-size: 16px; }
-          .hero-logo { font-size: 36px; }
-          .feature-grid { grid-template-columns: 1fr; gap: 12px; }
-          .hero-container { padding: 28px 16px; }
-        }
-      `}</style>
-
-      <div className="grid-bg" />
-      <div className="hero-glow g1" />
-      <div className="hero-glow g2" />
-      <div className="hero-glow g3" />
-
-      <div className="hero-container">
-        {/* Modern Logo */}
-        <div style={{
-          marginBottom: 48,
-          animation: 'logoReveal 0.8s ease-out'
-        }}>
-          <div className="hero-logo" style={{ fontFamily: 'Inter, system-ui, sans-serif', background: 'linear-gradient(135deg, #ffffff 0%, #8b5cf6 50%, #ec4899 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-            APT
-            <svg width="56" height="56" viewBox="0 0 24 24" fill="none" style={{ margin: '0 -8px' }}>
-              <circle cx="12" cy="12" r="10" stroke="url(#grad1)" strokeWidth="2" />
-              <path d="M8 12h8M12 8v8" stroke="url(#grad1)" strokeWidth="2" strokeLinecap="round" />
-              <defs>
-                <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#8b5cf6" />
-                  <stop offset="100%" stopColor="#ec4899" />
-                </linearGradient>
-              </defs>
-            </svg>
-            S
-          </div>
-          <div className="hero-sub">Design Studio</div>
-        </div>
-
-        {/* Hero Content */}
-        <h1 className="hero-heading">
-          <span style={{ color: 'white' }}>Create </span>
-          <span style={{ background: 'linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%)', backgroundClip: 'text', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Stunning</span>
-          <br />
-          <span style={{ color: 'white' }}> Aptos Lab Merch</span>
-        </h1>
-
-        <p className="hero-subcopy">Professional design tools meet intuitive customization. Create unique apparel and accessories that stand out.</p>
-
-        {/* CTA Buttons */}
-        <div style={{
-          display: 'flex',
-          gap: 16,
-          justifyContent: 'center',
-          marginBottom: 80
-        }}>
-          <button
-            onClick={onStartCreating}
-            className="cta-modern"
-          >
-            Start Creating
-          </button>
-
-        </div>
-
-        {/* Feature Cards */}
-        <div className="feature-grid">
-          {[
-            { icon: '🎨', label: 'Premium Templates', value: '50+' },
-            { icon: '👕', label: 'Product Types', value: '10+' },
-            { icon: '🎯', label: 'Custom Positions', value: 'Unlimited' },
-            { icon: '⚡', label: 'Instant Preview', value: 'Real-time' }
-          ].map((feature, idx) => (
-            <div key={idx} className="feature-card">
-              <div style={{ fontSize: 32, marginBottom: 12 }}>{feature.icon}</div>
-              <div style={{ fontSize: 24, fontWeight: 700, color: '#8b5cf6', marginBottom: 4 }}>
-                {feature.value}
-              </div>
-              <div style={{ fontSize: 14, color: 'rgba(255,255,255,0.6)' }}>
-                {feature.label}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
 
 function HeroPage({ onStartCreating }) {
   return (
-    <div className="min-h-screen bg-black text-white flex flex-col"  style={{
-        // set the hero background image with a dark fallback color
-        backgroundImage: "url('/assets/dae7e448-1ba3-40af-b251-fe5fa4982896.jpeg')",
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-        backgroundColor: '#0f172a'
-      }}>
-      {/* HEADER */}
+    <div className="min-h-screen flex flex-col bg-black text-white bg-[url('/assets/dae7e448-1ba3-40af-b251-fe5fa4982896.jpeg')] bg-cover bg-center">
       <header className="flex items-center justify-center bg-black py-4 border-b border-neutral-800 shadow-md">
         <div className="flex items-center space-x-3">
-          <img
-            src="/assets/images.jpg" // your Aptos logo symbol
-            alt="Aptos Logo"
-            className="w-7 h-7"
-          />
-         
+          <img src="/assets/images.jpg" alt="Aptos Logo" className="w-7 h-7" />
         </div>
       </header>
-
-      {/* HERO SECTION */}
       <section className="relative flex flex-col items-center justify-center flex-1 overflow-hidden text-center">
-        {/* Animated Mesh Background */}
-        <div className="absolute inset-0 bg-[url('/assets/meta.avif')] bg-cover bg-center opacity-30"></div>
-        <div className="absolute inset-0 mesh-overlay"></div>
-
-        {/* Main Content */}
+        <div className="absolute inset-0 bg-[url('/assets/meta.avif')] bg-cover bg-center opacity-30" />
+        <div className="absolute inset-0" />
         <div className="relative z-10 px-6 mt-10">
-          <h2 className="text-2xl md:text-4xl font-bold mb-12 tracking-wide">
-           APTOS LABS
-          </h2>
-
-          {/* Dark Box with CTA */}
+          <h2 className="text-2xl md:text-4xl font-bold mb-12 tracking-wide">APTOS LABS</h2>
           <div className="bg-neutral-900/70 border border-neutral-700 rounded-lg p-6 max-w-md mx-auto shadow-xl">
-            <h3 className="text-lg md:text-xl font-semibold mb-4">
-              MAKE YOUR NEXT CAREER MOVE
-            </h3>
+            <h3 className="text-lg md:text-xl font-semibold mb-4">MAKE YOUR NEXT CAREER MOVE</h3>
             <button
               onClick={onStartCreating}
               className="w-full py-3 text-sm md:text-base tracking-widest uppercase border border-neutral-500 bg-neutral-800 hover:bg-neutral-700 transition rounded-md"
@@ -272,108 +69,19 @@ function HeroPage({ onStartCreating }) {
           </div>
         </div>
       </section>
-
-      {/* BOTTOM SECTION */}
       <footer className="grid grid-cols-1 md:grid-cols-2 gap-4 p-6 bg-black border-t border-neutral-800">
         <div className="bg-neutral-900 border border-neutral-700 p-4 text-center rounded-lg">
           <h4 className="font-semibold mb-1">Explore Products</h4>
-          <p className="text-xs text-neutral-400">
-            Discover what’s next on Aptos Labs
-          </p>
+          <p className="text-xs text-neutral-400">Discover what’s next on Aptos Labs</p>
         </div>
         <div className="bg-neutral-900 border border-neutral-700 p-4 text-center rounded-lg">
           <h4 className="font-semibold mb-1">Build on Aptos</h4>
-          <p className="text-xs text-neutral-400" >
-            Start creating your decentralized future
-          </p>
+          <p className="text-xs text-neutral-400">Start creating your decentralized future</p>
         </div>
       </footer>
     </div>
-  
   );
-}
-
-function HeroPage1({ onStartCreating }) {
-  return (
-    <section
-      className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden text-white"
-      style={{
-        // set the hero background image with a dark fallback color
-        backgroundImage: "url('/assets/dae7e448-1ba3-40af-b251-fe5fa4982896.jpeg')",
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-        backgroundColor: '#0f172a'
-      }}
-    >
-      {/* Gradient background blobs */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-[-200px] left-[-200px] w-[600px] h-[600px] bg-violet-600/20 rounded-full blur-[120px]" />
-        <div className="absolute bottom-[-200px] right-[-200px] w-[600px] h-[600px] bg-pink-500/20 rounded-full blur-[120px]" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-blue-500/10 rounded-full blur-[150px]" />
-      </div>
-
-      {/* Main content */}
-      <div className="relative z-10 flex flex-col items-center justify-center text-center px-6">
-        {/* APTOS Logo */}
-        <motion.img
-          src="/assets/Aptos_Logo.png"
-          alt="Aptos Logo"
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1 }}
-          className="w-[300px] mb-10 drop-shadow-[0_0_40px_rgba(139,92,246,0.5)]"
-        />
-
-        {/* Subtitle */}
-        <p className="uppercase tracking-[0.3em] text-gray-300 text-sm mb-3">
-          Labs Studio
-        </p>
-
-        {/* Heading */}
-        <motion.h2
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="text-4xl sm:text-6xl font-extrabold mb-4"
-        >
-          Create{" "}
-          <span className="bg-gradient-to-r from-violet-400 to-pink-400 bg-clip-text text-transparent">
-            Aptos Lab Merch
-          </span>
-        </motion.h2>
-
-        {/* Description */}
-        <motion.p
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="max-w-xl text-gray-300 text-lg mb-10"
-        >
-          Design, customize, and preview your apparel in real-time with our
-          intuitive editor.
-        </motion.p>
-
-        {/* CTA Button */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.4 }}
-        >
-          <button
-            onClick={onStartCreating}
-            className="px-10 py-4 text-lg font-semibold rounded-full bg-gradient-to-r from-violet-500 to-pink-500 hover:from-pink-500 hover:to-violet-500 transition-transform duration-300 hover:scale-105 shadow-lg"
-          >
-            Start Creating
-          </button>
-        </motion.div>
-
-      
-      </div>
-
-   
-    </section>
-  );
+       
 }
 
 function StepProgress({ step, setStep }) {
@@ -385,53 +93,33 @@ function StepProgress({ step, setStep }) {
     { num: 5, label: 'Review' }
   ];
   return (
-    <div style={{ marginBottom: 48, padding: '0 16px' }}>
-      <div style={{ position: 'relative', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <div style={{
-          position: 'absolute',
-          top: 20,
-          left: '5%',
-          right: '5%',
-          height: 2,
-          background: '#e2e8f0',
-          zIndex: 0
-        }} />
-        <div style={{
-          position: 'absolute',
-          top: 20,
-          left: '5%',
-          width: `${((step - 1) / 4) * 90}%`,
-          height: 2,
-          background: '#1e293b',
-          zIndex: 0,
-          transition: 'width 0.3s'
-        }} />
+    <div className="mb-12 px-4">
+      <div className="relative flex items-center justify-between">
+        {/* background track */}
+        <div className="absolute left-[5%] right-[5%] top-5 h-[2px] bg-gray-200 z-0" />
+        {/* progress fill - width computed by inline style for percent */}
+        <div
+          className="absolute left-[5%] top-5 h-[2px] bg-slate-800 z-0 transition-all duration-300"
+          style={{ width: `${((step - 1) / 4) * 90}%` }}
+        />
+
         {items.map(s => {
           const isActive = step === s.num;
           const isCompleted = step > s.num;
           return (
-            <div key={s.num} onClick={() => setStep(s.num)} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flex: 1, cursor: 'pointer', zIndex: 1 }}>
-              <div style={{
-                width: 40,
-                height: 40,
-                borderRadius: 20,
-                background: isCompleted ? '#16a34a' : isActive ? '#1e293b' : 'white',
-                border: isCompleted ? 'none' : isActive ? '3px solid #1e293b' : '2px solid #e2e8f0',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: isCompleted || isActive ? 'white' : '#94a3b8',
-                marginBottom: 8
-              }}>
+            <div
+              key={s.num}
+              onClick={() => setStep(s.num)}
+              className="flex flex-col items-center flex-1 cursor-pointer z-10"
+            >
+              <div
+                className={`w-10 h-10 rounded-full mb-2 flex items-center justify-center ${isCompleted ? 'bg-green-500 text-white' : isActive ? 'bg-slate-800 text-white' : 'bg-white text-gray-400'}`}
+                style={{ border: isCompleted ? 'none' : isActive ? '3px solid #1e293b' : '2px solid #e2e8f0' }}
+              >
                 {isCompleted ? '✓' : s.num}
               </div>
-              <div style={{
-                fontSize: isActive ? 13 : 12,
-                fontWeight: isActive ? 600 : 500,
-                color: isActive ? '#1e293b' : '#64748b',
-                textAlign: 'center',
-                whiteSpace: 'nowrap'
-              }}>
+
+              <div className={`text-center whitespace-nowrap ${isActive ? 'text-sm font-semibold text-slate-800' : 'text-xs text-gray-500'}`}>
                 {s.label}
               </div>
             </div>
@@ -444,93 +132,35 @@ function StepProgress({ step, setStep }) {
 
 function ProductCard({ p, selected, onSelect }) {
   return (
-    <div 
-      onClick={() => onSelect(p.id)} 
-      style={{
-        borderRadius: 12,
-        border: selected ? '2px solid #1e293b' : '2px solid #e2e8f0',
-        background: selected ? '#f8fafc' : 'white',
-        boxShadow: selected ? '0 4px 6px -1px rgba(0,0,0,0.1)' : 'none',
-        transition: 'all 0.2s',
-        cursor: 'pointer',
-        display: 'flex',
-        flexDirection: 'column',
-        width: '100%',
-        height: '100%',
-        minHeight: 280 // Ensure consistent minimum height
-      }}
+    <div
+      onClick={() => onSelect(p.id)}
+      className={`flex flex-col w-full h-full min-h-[280px] transition-all duration-200 cursor-pointer rounded-lg ${selected ? 'border-2 border-slate-800 bg-slate-50 shadow-md' : 'border-2 border-gray-200 bg-white'}`}
     >
-      <div style={{
-        flex: '1 1 auto',
-        background: 'linear-gradient(to bottom right,#f8fafc,#f1f5f9)',
-        padding: '16px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderTopLeftRadius: 10,
-        borderTopRightRadius: 10,
-        minHeight: 200, // Ensure minimum image container height
-        overflow: 'hidden'
-      }}>
-        <img 
-          src={p.image} 
-          alt={p.name} 
-          style={{ 
-            width: '100%',
-            height: '100%',
-            maxHeight: 220,
-            objectFit: 'contain',
-            transition: 'transform 0.2s ease',
-            transform: selected ? 'scale(1.05)' : 'scale(1)'
-          }} 
+      <div className="flex-1 bg-gradient-to-br from-slate-50 to-slate-100 p-4 flex items-center justify-center rounded-t-lg min-h-[200px] overflow-hidden">
+        <img
+          src={p.image}
+          alt={p.name}
+          className={`w-full h-full max-h-[220px] object-contain transition-transform duration-200 transform ${selected ? 'scale-105' : 'scale-100'}`}
         />
       </div>
-      <div style={{ 
-        padding: '12px 16px',
-        borderTop: '1px solid #e2e8f0',
-        background: selected ? '#f8fafc' : 'white',
-        borderBottomLeftRadius: 10,
-        borderBottomRightRadius: 10
-      }}>
-        <h3 style={{ 
-          fontWeight: 600, 
-          color: '#1e293b', 
-          marginBottom: 4,
-          fontSize: '15px',
-          overflow: 'hidden',
-          textOverflow: 'ellipsis',
-          whiteSpace: 'nowrap'
-        }}>{p.name}</h3>
-        <p style={{ 
-          fontSize: '13px', 
-          color: '#64748b', 
-          textTransform: 'capitalize',
-          overflow: 'hidden',
-          textOverflow: 'ellipsis',
-          whiteSpace: 'nowrap'
-        }}>{p.type}</p>
+
+      <div className="p-3 border-t border-gray-200 rounded-b-lg bg-white">
+        <h3 className="font-semibold text-slate-800 text-sm truncate">{p.name}</h3>
+        <p className="text-sm text-gray-500 capitalize truncate">{p.type}</p>
       </div>
     </div>
   );
 }
 
 function ProductGrid({ products, selectedId, onSelect, columns }) {
-  // Enhanced responsive grid that adapts to screen size
-  const gridTemplate = typeof columns === 'number'
-    ? `repeat(${columns}, minmax(0, 1fr))`
-    : `repeat(auto-fit, minmax(min(100%, 260px), 1fr))`;  // Improved minmax with min() function
-
+  // If explicit columns provided, use responsive fixed columns; otherwise use auto-fit minmax
+  const explicitCols = typeof columns === 'number' ? `md:grid-cols-${columns}` : '';
+  // Use Tailwind arbitrary grid columns for auto-fit minmax at md+ (requires JIT)
   return (
-    <div style={{ 
-      display: 'grid',
-      gridTemplateColumns: gridTemplate,
-      gap: '24px',
-      width: '100%',
-      maxWidth: '100%',
-      padding: '0 8px', // Add some breathing room on very small screens
-      boxSizing: 'border-box'
-    }}>
-      {products.map(p => <ProductCard key={p.id} p={p} selected={p.id === selectedId} onSelect={onSelect} />)}
+    <div className={`grid grid-cols-1 sm:grid-cols-2 ${explicitCols} md:grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-6 w-full px-2 box-border`}>
+      {products.map(p => (
+        <ProductCard key={p.id} p={p} selected={p.id === selectedId} onSelect={onSelect} />
+      ))}
     </div>
   );
 }
@@ -677,18 +307,8 @@ function ProductPreview({ product, color, position, chosenTemplate, accent, sele
 
 function SidebarPreview({ product, color, position, chosenTemplate, accent, selectedIcon, personalText, font }) {
   return (
-    <div style={{ background: 'white', border: '2px solid #e2e8f0', borderRadius: 12, padding: 2 }}>
-      <h3 style={{ fontSize: 14, fontWeight: 600, color: '#334155', marginBottom: 12 }}>
-        Quick Preview
-      </h3>
-      <div style={{
-        background: 'linear-gradient(to bottom right, #f8fafc, #f1f5f9)',
-        padding: 16,
-        borderRadius: 8,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center'
-      }}>
+    <div className="bg-white border-2 border-gray-200 rounded-md p-2">
+      <div className="bg-gradient-to-br from-slate-50 to-slate-100 p-4 rounded-md flex items-center justify-center">
         <ProductPreview
           product={product}
           color={color}
@@ -827,98 +447,85 @@ function PrintQueue({ queue, onClearQueue }) {
   }
 
   return (
-    <div style={{ background: 'white', border: '2px solid #e2e8f0', borderRadius: 12, padding: 16 }}>
-      <h3 style={{ fontSize: 14, fontWeight: 600, color: '#334155', marginBottom: 12 }}>
-        Print Queue
-      </h3>
+    <div className="bg-white border-2 border-gray-200 rounded-md p-4">
+      <h3 className="text-sm font-semibold text-slate-800 mb-3">Print Queue</h3>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+      <div className="flex flex-col gap-3">
         {queue.length === 0 && (
-          <div style={{ textAlign: 'center', padding: '32px 0', color: '#94a3b8' }}>
-            <p style={{ fontSize: 14 }}>No queued designs</p>
+          <div className="text-center py-8 text-gray-400">
+            <p className="text-sm">No queued designs</p>
           </div>
         )}
 
         {queue.map(j => (
-          <div key={j.id} style={{ display: 'flex', gap: 12, alignItems: 'center', padding: 12, borderRadius: 8, background: '#f8fafc', border: '1px solid #e2e8f0' }}>
-            <div style={{ flex: '0 0 72px' }}>
+          <div key={j.id} className="flex gap-3 items-center p-3 rounded-md bg-slate-50 border border-gray-200">
+            <div className="flex-none w-[72px]">
               <img src={
-                // try to show position preview or product image
                 (PRODUCTS.find(p => p.id === j.productId)?.customizablePositions?.find(p => p.id === j.position)?.previewImage)
                 || (PRODUCTS.find(p => p.id === j.productId)?.customizablePositions?.find(p => p.id === j.position)?.image)
                 || PRODUCTS.find(p => p.id === j.productId)?.image
-              } alt={j.product} style={{ width: 72, height: 72, objectFit: 'contain' }} onError={(e) => e.currentTarget.style.display = 'none'} />
+              } alt={j.product} className="w-[72px] h-[72px] object-contain" onError={(e) => e.currentTarget.style.display = 'none'} />
             </div>
 
-            <div style={{ flex: 1 }}>
-              <div style={{ fontWeight: 600 }}>{j.product}</div>
-              <div style={{ fontSize: 12, color: '#64748b' }}>{j.color || '—'} • {j.size || '—'}</div>
-              <div style={{ fontSize: 12, color: '#94a3b8' }}>{new Date(j.createdAt).toLocaleString()}</div>
+            <div className="flex-1">
+              <div className="font-semibold">{j.product}</div>
+              <div className="text-xs text-gray-500">{j.color || '—'} • {j.size || '—'}</div>
+              <div className="text-xs text-gray-400">{new Date(j.createdAt).toLocaleString()}</div>
             </div>
 
-            <div style={{ display: 'flex', gap: 8 }}>
-              <button onClick={() => setSelectedJob(j)} style={{ padding: '8px 12px', borderRadius: 8, border: '1px solid #e2e8f0', background: 'white' }}>
-                View
-              </button>
+            <div className="flex gap-2">
+              <button onClick={() => setSelectedJob(j)} className="px-3 py-1 rounded-md border border-gray-200 bg-white">View</button>
               <button onClick={() => {
-                // remove this job
                 if (!confirm('Remove this job from the queue?')) return;
-                onClearQueue && onClearQueue(); // if clearing all is desired call parent; otherwise remove single
-                // If parent wants finer control, you can expose remove function instead.
-              }} style={{ padding: '8px 12px', borderRadius: 8, background: '#ef4444', color: 'white', border: 'none' }}>
-                Remove
-              </button>
+                onClearQueue && onClearQueue();
+              }} className="px-3 py-1 rounded-md bg-red-500 text-white">Remove</button>
             </div>
           </div>
         ))}
       </div>
 
       {queue.length > 0 && (
-        <div style={{ display: 'flex', gap: 8, marginTop: 12 }}>
-          <button onClick={() => { if (confirm('Clear entire queue?')) onClearQueue && onClearQueue(); }} style={{ flex: 1, padding: '8px 12px', borderRadius: 8, border: '2px solid #e2e8f0', background: 'white' }}>
-            Clear Queue
-          </button>
+        <div className="flex gap-2 mt-3">
+          <button onClick={() => { if (confirm('Clear entire queue?')) onClearQueue && onClearQueue(); }} className="flex-1 px-3 py-2 rounded-md border-2 border-gray-200 bg-white">Clear Queue</button>
         </div>
       )}
 
       {/* Details panel */}
       {selectedJob && (
-        <div style={{ marginTop: 16, padding: 12, borderRadius: 8, background: '#fff', border: '1px solid #e6eef6' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-            <div style={{ fontWeight: 700 }}>{selectedJob.product} — Details</div>
-            <div style={{ display: 'flex', gap: 8 }}>
-              <button onClick={() => { generateAndDownload(selectedJob); }} disabled={downloading} style={{ padding: '8px 12px', borderRadius: 8, background: '#1e293b', color: 'white', border: 'none' }}>
-                {downloading ? 'Generating…' : 'Download Final Image'}
-              </button>
-              <button onClick={() => setSelectedJob(null)} style={{ padding: '8px 12px', borderRadius: 8, border: '1px solid #e2e8f0', background: 'white' }}>Close</button>
+        <div className="mt-4 p-3 rounded-md bg-white border border-gray-100">
+          <div className="flex justify-between items-center mb-2">
+            <div className="font-bold">{selectedJob.product} — Details</div>
+            <div className="flex gap-2">
+              <button onClick={() => { generateAndDownload(selectedJob); }} disabled={downloading} className="px-3 py-1 rounded-md bg-slate-800 text-white">{downloading ? 'Generating…' : 'Download Final Image'}</button>
+              <button onClick={() => setSelectedJob(null)} className="px-3 py-1 rounded-md border border-gray-200 bg-white">Close</button>
             </div>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 320px', gap: 12 }}>
+          <div className="grid md:grid-cols-2 gap-3">
             <div>
-              <h4 style={{ margin: '6px 0', fontSize: 13, color: '#64748b' }}>Product Details</h4>
-              <div style={{ background: '#f8fafc', padding: 12, borderRadius: 8 }}>
+              <h4 className="text-xs text-gray-500 mb-2">Product Details</h4>
+              <div className="bg-slate-50 p-3 rounded-md">
                 <div><strong>{selectedJob.product}</strong></div>
-                <div style={{ fontSize: 13, color: '#64748b' }}>ID: {selectedJob.productId}</div>
-                <div style={{ marginTop: 8 }}>Color: {selectedJob.color || '—'}</div>
+                <div className="text-sm text-gray-500">ID: {selectedJob.productId}</div>
+                <div className="mt-2">Color: {selectedJob.color || '—'}</div>
                 <div>Size: {selectedJob.size || '—'}</div>
                 <div>Position: {selectedJob.position || '—'}</div>
                 <div>Template: {selectedJob.template || '—'}</div>
-                <div style={{ marginTop: 8 }}>Text: {selectedJob.personalText || '—'}</div>
+                <div className="mt-2">Text: {selectedJob.personalText || '—'}</div>
                 <div>Icon: {selectedJob.selectedIcon || '—'}</div>
               </div>
 
-              <h4 style={{ margin: '12px 0 6px 0', fontSize: 13, color: '#64748b' }}>Customer Details</h4>
-              <div style={{ background: '#f8fafc', padding: 12, borderRadius: 8 }}>
+              <h4 className="text-xs text-gray-500 mt-3 mb-2">Customer Details</h4>
+              <div className="bg-slate-50 p-3 rounded-md">
                 <div><strong>{selectedJob.customer?.name}</strong></div>
-                <div style={{ fontSize: 13, color: '#64748b' }}>{selectedJob.customer?.email}</div>
-                <div style={{ marginTop: 8 }}>{selectedJob.customer?.notes || '—'}</div>
+                <div className="text-sm text-gray-500">{selectedJob.customer?.email}</div>
+                <div className="mt-2">{selectedJob.customer?.notes || '—'}</div>
               </div>
             </div>
 
             <div>
-              <h4 style={{ margin: '6px 0', fontSize: 13, color: '#64748b' }}>Final Product</h4>
-              <div style={{ background: 'linear-gradient(to bottom right, #f8fafc, #f1f5f9)', padding: 12, borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <h4 className="text-xs text-gray-500 mb-2">Final Product</h4>
+              <div className="bg-gradient-to-br from-slate-50 to-slate-100 p-3 rounded-md flex items-center justify-center">
                 <ProductPreview
                   product={PRODUCTS.find(p => p.id === selectedJob.productId)}
                   color={selectedJob.color}
@@ -946,19 +553,19 @@ function ColorPicker({ product, color, setColor }) {
   if (!product?.variants?.colors || product.variants.colors.length === 0) return null;
   return (
     <div>
-      <label style={{ display: 'block', fontSize: 14, fontWeight: 500, color: '#334155', marginBottom: 12 }}>
-        Color
-      </label>
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
+      <label className="block text-sm font-medium text-slate-800 mb-3">Color</label>
+      <div className="flex flex-wrap gap-3">
         {product.variants.colors.map(col => (
-          <button key={col.id} onClick={() => setColor(col.id)} title={col.name} style={{
-            background: toDisplayColor(product, col.id),
-            width: 48,
-            height: 48,
-            borderRadius: 8,
-            border: color === col.id ? '4px solid #1e293b' : '2px solid #e2e8f0',
-            cursor: 'pointer'
-          }} />
+          <button
+            key={col.id}
+            onClick={() => setColor(col.id)}
+            title={col.name}
+            className={`w-12 h-12 rounded-md cursor-pointer`}
+            style={{
+              background: toDisplayColor(product, col.id),
+              border: color === col.id ? '4px solid #1e293b' : '2px solid #e2e8f0'
+            }}
+          />
         ))}
       </div>
     </div>
@@ -969,18 +576,14 @@ function SizePicker({ product, size, setSize }) {
   if (!product.variants.sizes) return null;
   return (
     <div>
-      <label style={{ display: 'block', fontSize: 14, fontWeight: 500, color: '#334155', marginBottom: 12 }}>
-        Size
-      </label>
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+      <label className="block text-sm font-medium text-slate-800 mb-3">Size</label>
+      <div className="flex flex-wrap gap-2">
         {product.variants.sizes.map(s => (
-          <button key={s} onClick={() => setSize(s)} style={{
-            padding: '8px 16px',
-            borderRadius: 8,
-            background: size === s ? '#1e293b' : 'white',
-            color: size === s ? 'white' : '#334155',
-            border: size === s ? 'none' : '1px solid #e2e8f0'
-          }}>
+          <button
+            key={s}
+            onClick={() => setSize(s)}
+            className={`px-3 py-2 rounded-md font-medium ${size === s ? 'bg-slate-800 text-white' : 'bg-white text-slate-800 border border-gray-200'}`}
+          >
             {s}
           </button>
         ))}
@@ -995,8 +598,8 @@ function PositionPicker({ product, position, setPosition }) {
 
   return (
     <div>
-      <label style={{ display: 'block', fontSize: 14, fontWeight: 500, color: '#334155', marginBottom: 12 }}>Design Position</label>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 12 }}>
+      <label className="block text-sm font-medium text-slate-800 mb-3">Design Position</label>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
         {product.customizablePositions.map(pos => {
           const thumb = pos.previewImage || pos.image || null;
           const selected = position === pos.id;
@@ -1006,39 +609,18 @@ function PositionPicker({ product, position, setPosition }) {
               onClick={() => setPosition(pos.id)}
               title={pos.name}
               aria-pressed={selected}
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                gap: 8,
-                padding: 8,
-                borderRadius: 10,
-                border: selected ? '2px solid #1e293b' : '2px solid #e2e8f0',
-                background: selected ? '#f8fafc' : 'white',
-                cursor: 'pointer',
-                textAlign: 'center'
-              }}
+              className={`flex flex-col items-center gap-2 p-2 rounded-lg text-center cursor-pointer ${selected ? 'border-2 border-slate-800 bg-slate-50' : 'border-2 border-gray-200 bg-white'}`}
             >
-              <div style={{
-                width: '100%',
-                height: 88,
-                borderRadius: 8,
-                background: '#fbfdff',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                overflow: 'hidden',
-                border: '1px solid rgba(0,0,0,0.03)'
-              }}>
+              <div className="w-full h-22 rounded-md bg-white flex items-center justify-center overflow-hidden border" style={{ borderColor: 'rgba(0,0,0,0.03)' }}>
                 {thumb ? (
-                  <img src={thumb} alt={pos.name} style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }} onError={(e) => { e.currentTarget.style.display = 'none'; }} />
+                  <img src={thumb} alt={pos.name} className="w-full h-full object-contain" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
                 ) : (
-                  <div style={{ fontSize: 12, color: '#94a3b8' }}>{pos.name}</div>
+                  <div className="text-xs text-gray-400">{pos.name}</div>
                 )}
               </div>
-              <div style={{ fontSize: 13, color: '#334155', fontWeight: 600 }}>{pos.name}</div>
+              <div className="text-sm text-slate-800 font-semibold">{pos.name}</div>
               {pos.maxWidth && (
-                <div style={{ fontSize: 12, color: '#64748b' }}>{pos.maxWidth}×{pos.maxHeight}</div>
+                <div className="text-xs text-gray-500">{pos.maxWidth}×{pos.maxHeight}</div>
               )}
             </button>
           );
@@ -1050,23 +632,17 @@ function PositionPicker({ product, position, setPosition }) {
 
 function TemplateCard({ t, selected, onSelect, accent }) {
   return (
-    <div onClick={() => onSelect(t.id)} style={{
-      borderRadius: 12,
-      border: selected ? '2px solid #1e293b' : '2px solid #e2e8f0',
-      background: selected ? '#f8fafc' : 'white',
-      cursor: 'pointer',
-      paddingBottom: 8
-    }}>
-      <div style={{ width: '100%', height: 140, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }}>
+    <div onClick={() => onSelect(t.id)} className={`rounded-lg pb-2 cursor-pointer ${selected ? 'border-2 border-slate-800 bg-slate-50' : 'border-2 border-gray-200 bg-white'}`}>
+      <div className="w-full h-[140px] flex items-center justify-center p-4">
         {t.image ? (
-          <img src={t.image} alt={t.name} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+          <img src={t.image} alt={t.name} className="w-full h-full object-contain" />
         ) : (
           t.svg && t.svg(t.canColor ? accent : '#222')
         )}
       </div>
-      <div style={{ padding: 12 }}>
-        <div style={{ fontWeight: 600, color: '#1e293b' }}>{t.name}</div>
-        <div style={{ fontSize: 12, color: '#64748b' }}>{t.event}</div>
+      <div className="p-3">
+        <div className="font-semibold text-slate-800">{t.name}</div>
+        <div className="text-xs text-gray-500">{t.event}</div>
       </div>
     </div>
   );
@@ -1074,7 +650,7 @@ function TemplateCard({ t, selected, onSelect, accent }) {
 
 function TemplateGallery({ templates, templateId, onSelect }) {
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 12 }}>
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
       {templates.map(t => {
         const thumbH = t.previewHeight || 96;
         const coords = t.previewCoords || { x: 50, y: 50 };
@@ -1083,42 +659,23 @@ function TemplateGallery({ templates, templateId, onSelect }) {
           <button
             key={t.id}
             onClick={() => onSelect(t.id)}
-            style={{
-              background: selected ? '#f8fafc' : 'white',
-              border: selected ? '2px solid #1e293b' : '1px solid #e6eef6',
-              borderRadius: 10,
-              padding: 8,
-              cursor: 'pointer',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 8,
-              alignItems: 'center'
-            }}
+            className={`flex flex-col items-center gap-2 p-2 rounded-lg text-center cursor-pointer ${selected ? 'bg-slate-50 border-2 border-slate-800' : 'bg-white border border-gray-200'}`}
             title={t.name || t.image?.split('/').pop() || 'Template'}
           >
-            <div style={{ width: '100%', height: thumbH, borderRadius: 8, overflow: 'hidden', background: '#fbfdff', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
-              {t.image ? (
-                <img src={t.image} alt={t.name} style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }} onError={(e) => { e.currentTarget.style.display = 'none'; }} />
-              ) : (
-                <div style={{ color: '#94a3b8', fontSize: 12 }}>No preview</div>
-              )}
+            <div className="w-full" style={{ height: thumbH }}>
+              <div className="w-full h-full rounded-md overflow-hidden bg-white flex items-center justify-center relative">
+                {t.image ? (
+                  <img src={t.image} alt={t.name} className="w-full h-full object-contain" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
+                ) : (
+                  <div className="text-xs text-gray-400">No preview</div>
+                )}
 
-              {/* small position marker inside thumbnail if coords provided */}
-              <div style={{
-                position: 'absolute',
-                left: `${coords.x}%`,
-                top: `${coords.y}%`,
-                transform: 'translate(-50%,-50%)',
-                width: 10,
-                height: 10,
-                borderRadius: 10,
-                background: 'rgba(30,41,59,0.9)',
-                boxShadow: '0 2px 6px rgba(0,0,0,0.12)'
-              }} />
+                <div className="absolute" style={{ left: `${coords.x}%`, top: `${coords.y}%`, transform: 'translate(-50%,-50%)', width: 10, height: 10, borderRadius: 9999, background: 'rgba(30,41,59,0.9)', boxShadow: '0 2px 6px rgba(0,0,0,0.12)' }} />
+              </div>
             </div>
 
-            <div style={{ fontSize: 13, fontWeight: 600, color: '#334155', textAlign: 'center', width: '100%' }}>{t.name || (t.image && t.image.split('/').pop())}</div>
-            {(t.maxWidth || t.maxHeight) && <div style={{ fontSize: 12, color: '#64748b' }}>{t.maxWidth || '—'}×{t.maxHeight || '—'}</div>}
+            <div className="text-sm font-semibold text-slate-800 w-full">{t.name || (t.image && t.image.split('/').pop())}</div>
+            {(t.maxWidth || t.maxHeight) && <div className="text-xs text-gray-500">{t.maxWidth || '—'}×{t.maxHeight || '—'}</div>}
           </button>
         );
       })}
@@ -1128,43 +685,6 @@ function TemplateGallery({ templates, templateId, onSelect }) {
 
 
 function PersonalizeForm({ personalText, setPersonalText, font, setFont, accent, setAccent }) {
-  return (
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 16 }}>
-      <div>
-        <label style={{ display: 'block', fontSize: 14, fontWeight: 500, color: '#334155', marginBottom: 8 }}>
-          Name / Initials / Text
-        </label>
-        <input
-          value={personalText}
-          onChange={e => setPersonalText(e.target.value)}
-          placeholder="Enter your text"
-          style={{
-            width: '100%',
-            padding: '12px 16px',
-            border: '2px solid #e2e8f0',
-            borderRadius: 8
-          }}
-        />
-      </div>
-      <div>
-        <label style={{ display: 'block', fontSize: 14, fontWeight: 500, color: '#334155', marginBottom: 8 }}>
-          Font Style
-        </label>
-        <select
-          value={font}
-          onChange={e => setFont(e.target.value)}
-          style={{
-            width: '100%',
-            padding: '12px 16px',
-            border: '2px solid #e2e8f0',
-            borderRadius: 8
-          }}
-        >
-          <option>Inter</option>
-          <option>Georgia</option>
-          <option>Monospace</option>
-        </select>
-      </div>
       {/* <div>
         <label style={{display: 'block', fontSize: 14, fontWeight: 500, color: '#334155', marginBottom: 8}}>
           Add Patch / Icon
@@ -1188,22 +708,29 @@ function PersonalizeForm({ personalText, setPersonalText, font, setFont, accent,
           ))}
         </div>
       </div> */}
+  return (
+    <div className="grid gap-4">
       <div>
-        <label style={{ display: 'block', fontSize: 14, fontWeight: 500, color: '#334155', marginBottom: 8 }}>
-          Accent Color
-        </label>
+        <label className="block text-sm font-medium text-slate-800 mb-2">Name / Initials / Text</label>
         <input
-          type="color"
-          value={accent}
-          onChange={e => setAccent(e.target.value)}
-          style={{
-            height: 48,
-            width: 96,
-            borderRadius: 8,
-            border: '2px solid #e2e8f0',
-            cursor: 'pointer'
-          }}
+          value={personalText}
+          onChange={e => setPersonalText(e.target.value)}
+          placeholder="Enter your text"
+          className="w-full px-4 py-3 border-2 border-gray-200 rounded-md"
         />
+      </div>
+      <div>
+        <label className="block text-sm font-medium text-slate-800 mb-2">Font Style</label>
+        <select value={font} onChange={e => setFont(e.target.value)} className="w-full px-4 py-3 border-2 border-gray-200 rounded-md">
+          <option>Inter</option>
+          <option>Georgia</option>
+          <option>Monospace</option>
+        </select>
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-slate-800 mb-2">Accent Color</label>
+        <input type="color" value={accent} onChange={e => setAccent(e.target.value)} className="h-12 w-24 rounded-md border-2 border-gray-200 cursor-pointer" />
       </div>
     </div>
   );
@@ -1211,44 +738,18 @@ function PersonalizeForm({ personalText, setPersonalText, font, setFont, accent,
 
 function ReviewPanel({ product, color, size, position, chosenTemplate, personalText, selectedIcon, onEdit, onSubmit }) {
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 12 }}>
-      <div style={{ background: '#f8fafc', padding: 24, borderRadius: 12, display: 'flex', flexDirection: 'column', gap: 12 }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <span style={{ fontWeight: 500, color: '#64748b' }}>Product:</span>
-          <span style={{ fontWeight: 600, color: '#1e293b' }}>{product.name}</span>
-        </div>
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <span style={{ fontWeight: 500, color: '#64748b' }}>Color:</span>
-          <span style={{ fontWeight: 600, color: '#1e293b' }}>{color}</span>
-        </div>
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <span style={{ fontWeight: 500, color: '#64748b' }}>Size:</span>
-          <span style={{ fontWeight: 600, color: '#1e293b' }}>{size}</span>
-        </div>
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <span style={{ fontWeight: 500, color: '#64748b' }}>Position:</span>
-          <span style={{ fontWeight: 600, color: '#1e293b' }}>{position || '—'}</span>
-        </div>
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <span style={{ fontWeight: 500, color: '#64748b' }}>Template:</span>
-          <span style={{ fontWeight: 600, color: '#1e293b' }}>{chosenTemplate?.name}</span>
-        </div>
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <span style={{ fontWeight: 500, color: '#64748b' }}>Text:</span>
-          <span style={{ fontWeight: 600, color: '#1e293b' }}>{personalText || '—'}</span>
-        </div>
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <span style={{ fontWeight: 500, color: '#64748b' }}>Icon:</span>
-          <span style={{ fontWeight: 600, color: '#1e293b' }}>{selectedIcon || '—'}</span>
-        </div>
+    <div className="grid gap-3">
+      <div className="bg-slate-50 p-6 rounded-lg flex flex-col gap-3">
+        <div className="flex justify-between"><span className="text-sm text-gray-500">Product:</span><span className="font-semibold text-slate-800">{product.name}</span></div>
+        <div className="flex justify-between"><span className="text-sm text-gray-500">Color:</span><span className="font-semibold text-slate-800">{color}</span></div>
+        <div className="flex justify-between"><span className="text-sm text-gray-500">Size:</span><span className="font-semibold text-slate-800">{size}</span></div>
+        <div className="flex justify-between"><span className="text-sm text-gray-500">Position:</span><span className="font-semibold text-slate-800">{position || '—'}</span></div>
+        <div className="flex justify-between"><span className="text-sm text-gray-500">Template:</span><span className="font-semibold text-slate-800">{chosenTemplate?.name}</span></div>
+        <div className="flex justify-between"><span className="text-sm text-gray-500">Text:</span><span className="font-semibold text-slate-800">{personalText || '—'}</span></div>
+        <div className="flex justify-between"><span className="text-sm text-gray-500">Icon:</span><span className="font-semibold text-slate-800">{selectedIcon || '—'}</span></div>
       </div>
-      <div style={{ display: 'flex', gap: 12 }}>
-        <button onClick={onEdit} style={{ flex: 1, padding: '12px 24px', borderRadius: 8, border: '2px solid #cbd5e1', background: 'white' }}>
-          Edit Design
-        </button>
-        <button onClick={onSubmit} style={{ flex: 1, padding: '12px 24px', borderRadius: 8, background: '#16a34a', color: 'white' }}>
-          Confirm & Submit
-        </button>
+      <div className="flex gap-3">
+        <button onClick={onEdit} className="text-gray-700 flex-1 px-4 py-3 rounded-md border-2 border-gray-200 bg-white">Edit Design</button>
       </div>
     </div>
   );
@@ -1258,11 +759,11 @@ function ReviewPanel({ product, color, size, position, chosenTemplate, personalT
 function QueuePage({ queue, onClearQueue, onBack }) {
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-        <h2 style={{ fontSize: 20, fontWeight: 700, color: '#1e293b' }}>Print Queue</h2>
-        <div style={{ display: 'flex', gap: 8 }}>
-          <button onClick={onBack} style={{ padding: '8px 12px', borderRadius: 8, border: '1px solid #e2e8f0', background: 'white' }}>← Continue Designing</button>
-          <button onClick={onClearQueue} style={{ padding: '8px 12px', borderRadius: 8, border: 'none', background: '#ef4444', color: 'white' }}>Clear All</button>
+      <div className="flex justify-between items-center mb-3">
+        <h2 className="text-lg font-bold text-slate-800">Print Queue</h2>
+        <div className="flex gap-2">
+          <button onClick={onBack} className="px-3 py-2 rounded-md border border-gray-200 bg-white">← Continue Designing</button>
+          <button onClick={onClearQueue} className="px-3 py-2 rounded-md bg-red-600 text-white">Clear All</button>
         </div>
       </div>
 
@@ -1285,12 +786,12 @@ function CustomerForm({ onSubmit }) {
       }
       onSubmit({ name, email, notes });
     }}>
-      <div style={{ display: 'grid', gap: 8 }}>
-        <input placeholder="Full name" value={name} onChange={e => setName(e.target.value)} style={{ padding: '8px 10px', borderRadius: 8, border: '1px solid #e6eef6' }} />
-        <input placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} style={{ padding: '8px 10px', borderRadius: 8, border: '1px solid #e6eef6' }} />
-        <textarea placeholder="Notes (optional)" value={notes} onChange={e => setNotes(e.target.value)} style={{ padding: '8px 10px', borderRadius: 8, border: '1px solid #e6eef6' }} rows={3} />
-        <div style={{ display: 'flex', gap: 8 }}>
-          <button type="submit" style={{ flex: 1, padding: '10px 12px', borderRadius: 8, background: '#16a34a', color: 'white', border: 'none' }}>Submit & Queue</button>
+      <div className="grid gap-2">
+        <input placeholder="Full name" value={name} onChange={e => setName(e.target.value)} className="p-3 rounded-md border border-gray-200" />
+        <input placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} className="p-3 rounded-md border border-gray-200" />
+        <textarea placeholder="Notes (optional)" value={notes} onChange={e => setNotes(e.target.value)} className="p-3 rounded-md border border-gray-200" rows={3} />
+        <div className="flex gap-2">
+          <button type="submit" className="flex-1 px-4 py-2 rounded-md bg-green-600 text-white">Submit &amp; Queue</button>
         </div>
       </div>
     </form>
@@ -1359,33 +860,14 @@ export default function AppWithHeroPage() {
   }
 
   return (
-    <div style={{
-      minHeight: '100vh',
-      background: 'linear-gradient(to bottom right, #f8fafc, #f1f5f9)',
-      padding: 24
-    }}>
-      <div style={{ maxWidth: 1280, margin: '0 auto' }}>
-        <div style={{
-          background: 'white',
-          borderRadius: 16,
-          boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)',
-          padding: 32,
-          marginBottom: 24
-        }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
-            <h1 style={{ fontSize: 30, fontWeight: 700, color: '#1e293b' }}>
-              Aptos Lab Merch designer
-            </h1>
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-6 px-4">
+      <div className="max-w-6xl mx-auto">
+        <div className="bg-white rounded-2xl shadow-xl p-1 mb-6">
+          <div className="flex justify-between items-center mb-6">
+            <h1 className="text-3xl font-bold text-gray-800">Aptos Lab Merch designer</h1>
             <button
               onClick={() => setShowHero(true)}
-              style={{
-                padding: '8px 16px',
-                borderRadius: 8,
-                border: '2px solid #e2e8f0',
-                background: 'white',
-                color: '#64748b',
-                cursor: 'pointer'
-              }}
+              className="px-4 py-2 rounded-lg border-2 border-gray-200 bg-white text-gray-500 hover:text-gray-700 transition-colors"
             >
               ← Home
             </button>
@@ -1393,28 +875,20 @@ export default function AppWithHeroPage() {
 
           <StepProgress step={step} setStep={setStep} />
 
-          <div style={{ gridTemplateColumns: '1fr', gap: 32 }}>
-            <div style={{
-              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-              gap: 32
-            }}>
-
-              <div className="preview-sidebar" style={{ display: 'flex', flexDirection: 'column', gap: 36 }}>
-                {step !== 1 && <SidebarPreview product={product} color={color} position={position} chosenTemplate={chosenTemplate} accent={accent} selectedIcon={selectedIcon} personalText={personalText} font={font} />}
-                {/* PrintQueue removed from sidebar */}
+          <div className="grid gap-8">
+            <div className="grid md:grid-cols-2 gap-8">
+               {step !== 1 &&
+              <div className="preview-sidebar flex flex-col gap-9">
+                <SidebarPreview product={product} color={color} position={position} chosenTemplate={chosenTemplate} accent={accent} selectedIcon={selectedIcon} personalText={personalText} font={font} />
               </div>
+              }
 
               <div className="main-content-area">
                 {step === 1 && (
                   <div>
-                    <h2 style={{ fontSize: 24, fontWeight: 600, color: '#1e293b', marginBottom: 24 }}>
-                      Choose Your Product
-                    </h2>
-                    {/* Force 4 columns on large screens by passing columns=4 */}
+                    <h2 className="text-2xl font-semibold text-gray-800 mb-6">Choose Your Product</h2>
                     <ProductGrid products={PRODUCTS} selectedId={productId} onSelect={(id) => { setProductId(id); }} columns={4} />
-
-                    {/* Centered Next button */}
-                    <div style={{ display: 'flex', justifyContent: 'center', marginTop: 24 }}>
+                    <div className="flex justify-center mt-6">
                       <button
                         onClick={() => {
                           if (!productId) {
@@ -1424,16 +898,9 @@ export default function AppWithHeroPage() {
                           setStep(2);
                         }}
                         disabled={!productId}
-                        style={{
-                          padding: '10px 24px',
-                          borderRadius: 8,
-                          background: productId ? '#1e293b' : '#e6eef6',
-                          color: productId ? 'white' : '#94a3b8',
-                          border: 'none',
-                          cursor: productId ? 'pointer' : 'not-allowed'
-                        }}
+                        className={`px-6 py-2 rounded-lg font-semibold transition-colors ${productId ? 'bg-gray-800 text-white hover:bg-gray-900' : 'bg-gray-100 text-gray-400 cursor-not-allowed'}`}
                       >
-                        Next: Color & Size
+                        Next: Color &amp; Size
                       </button>
                     </div>
                   </div>
@@ -1441,67 +908,46 @@ export default function AppWithHeroPage() {
 
                 {step === 2 && (
                   <div>
-                    <h2 style={{ fontSize: 24, fontWeight: 600, color: '#1e293b', marginBottom: 24 }}>
-                      Customize Options
-                    </h2>
-                    <div style={{ background: '#f8fafc', padding: 24, borderRadius: 12, marginBottom: 24 }}>
+                    <h2 className="text-2xl font-semibold text-gray-800 mb-6">Customize Options</h2>
+                    <div className="bg-gray-50 p-6 rounded-xl mb-6">
                       <ColorPicker product={product} color={color} setColor={setColor} />
-                      <div style={{ height: 12 }} />
+                      <div className="h-3" />
                       <SizePicker product={product} size={size} setSize={setSize} />
-                      <div style={{ height: 12 }} />
+                      <div className="h-3" />
                       <PositionPicker product={product} position={position} setPosition={setPosition} />
                     </div>
-                    <div style={{ display: 'flex', gap: 12 }}>
-                      <button onClick={goPrev} style={{ padding: '8px 24px', borderRadius: 8, border: '2px solid #cbd5e1' }}>
-                        Back
-                      </button>
-                      <button onClick={goNext} style={{ padding: '8px 24px', borderRadius: 8, background: '#1e293b', color: 'white' }}>
-                        Next: Templates
-                      </button>
+                    <div className="flex gap-3">
+                      <button onClick={goPrev} className="px-6 py-2 rounded-lg border-2 border-gray-300 bg-white text-gray-700 font-semibold">Back</button>
+                      <button onClick={goNext} className="px-6 py-2 rounded-lg bg-gray-800 text-white font-semibold">Next: Templates</button>
                     </div>
                   </div>
                 )}
 
                 {step === 3 && (
                   <div>
-                    <h2 style={{ fontSize: 24, fontWeight: 600, color: '#1e293b', marginBottom: 24 }}>
-                      Choose a Template
-                    </h2>
-
+                    <h2 className="text-2xl font-semibold text-gray-800 mb-6">Choose a Template</h2>
                     {!position && (
-                      <div style={{ marginBottom: 16, color: '#64748b' }}>Select a design position first to see templates.</div>
+                      <div className="mb-4 text-gray-400">Select a design position first to see templates.</div>
                     )}
-
                     {filteredTemplates.length === 0 ? (
-                      <div style={{ padding: 20, borderRadius: 12, background: '#fff', border: '1px dashed #e2e8f0', color: '#64748b' }}>
-                        No templates available for this product / position.
-                      </div>
+                      <div className="p-5 rounded-xl bg-white border border-dashed border-gray-200 text-gray-400">No templates available for this product / position.</div>
                     ) : (
                       <TemplateGallery templates={filteredTemplates} templateId={templateId} onSelect={setTemplateId} accent={accent} />
                     )}
-
-                    <div style={{ display: 'flex', gap: 12, marginTop: 12 }}>
-                      <button onClick={goPrev} style={{ padding: '8px 24px', borderRadius: 8, border: '2px solid #cbd5e1' }}>Back</button>
+                    <div className="flex gap-3 mt-3">
+                      <button onClick={goPrev} className="px-6 py-2 rounded-lg border-2 border-gray-300 bg-white text-gray-700 font-semibold">Back</button>
                       <button
                         onClick={() => {
                           if (!templateId) return alert('Pick a template first');
-                          // find the chosen template from the filtered set
                           const tpl = templatesForProduct.find(t => t.id === templateId);
                           if (tpl && tpl.canAddText === false) {
-                            // skip Personalize step and go straight to Review & Confirm
                             setStep(5);
                           } else {
                             setStep(4);
                           }
                         }}
                         disabled={!templateId}
-                        style={{
-                          padding: '8px 24px',
-                          borderRadius: 8,
-                          background: templateId ? '#1e293b' : '#e6eef6',
-                          color: templateId ? 'white' : '#94a3b8',
-                          border: 'none'
-                        }}
+                        className={`px-6 py-2 rounded-lg font-semibold transition-colors ${templateId ? 'bg-gray-800 text-white hover:bg-gray-900' : 'bg-gray-100 text-gray-400 cursor-not-allowed'}`}
                       >
                         Next
                       </button>
@@ -1511,75 +957,36 @@ export default function AppWithHeroPage() {
 
                 {step === 4 && (
                   <div>
-                    <h2 style={{
-                      fontSize: 24,
-                      fontWeight: 600,
-                      color: '#0f172a',         // improved heading contrast
-                      marginBottom: 24
-                    }}>
-                      Personalize Your Design
-                    </h2>
-
-                    <div style={{ display: 'grid', gap: 12 }}>
-                      {/* Text input */}
+                    <h2 className="text-2xl font-semibold text-gray-900 mb-6">Personalize Your Design</h2>
+                    <div className="grid gap-3">
                       <div>
-                        <label style={{ display: 'block', fontSize: 14, fontWeight: 500, color: '#334155', marginBottom: 8 }}>
-                          Add Text
-                        </label>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Add Text</label>
                         <input
                           value={personalText}
                           onChange={e => setPersonalText(e.target.value)}
                           placeholder="Enter your text"
-                          style={{
-                            width: '100%',
-                            padding: '10px 12px',
-                            borderRadius: 8,
-                            border: '1px solid #e6eef6',
-                            color: '#0f172a',      // ensure input text is high contrast
-                            background: 'white'
-                          }}
+                          className="w-full px-3 py-2 rounded-lg border border-gray-200 text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-violet-400"
                         />
                       </div>
-
-                      {/* Font picker */}
                       <div>
-                        <label style={{ display: 'block', fontSize: 14, fontWeight: 500, color: '#334155', marginBottom: 8 }}>
-                          Font
-                        </label>
-                        <select value={font} onChange={e => setFont(e.target.value)} style={{
-                          width: '100%',
-                          padding: '10px 12px',
-                          borderRadius: 8,
-                          border: '1px solid #e6eef6',
-                          color: '#0f172a',      // ensure option text is readable
-                          background: 'white'
-                        }}>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Font</label>
+                        <select
+                          value={font}
+                          onChange={e => setFont(e.target.value)}
+                          className="w-full px-3 py-2 rounded-lg border border-gray-200 text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-violet-400"
+                        >
                           {['Inter', 'Georgia', 'Montserrat', 'Pacifico'].map(f => <option key={f} value={f}>{f}</option>)}
                         </select>
                       </div>
-
-                      {/* Color/Accent */}
                       <div>
-                        <label style={{ display: 'block', fontSize: 14, fontWeight: 500, color: '#334155', marginBottom: 8 }}>
-                          Accent Color
-                        </label>
-                        <input type="color" value={accent} onChange={e => setAccent(e.target.value)} style={{ width: 72, height: 40, border: 'none', padding: 0, background: 'transparent' }} />
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Accent Color</label>
+                        <input type="color" value={accent} onChange={e => setAccent(e.target.value)} className="w-20 h-10 border-none p-0 bg-transparent" />
                       </div>
-
-                      <div style={{ display: 'flex', gap: 12, marginTop: 12 }}>
-                        <button onClick={goPrev} style={{ padding: '8px 24px', borderRadius: 8, border: '2px solid #cbd5e1' }}>Back</button>
+                      <div className="flex gap-3 mt-3">
+                        <button onClick={goPrev} className="px-6 py-2 rounded-lg border-2 border-gray-300 bg-white text-gray-700 font-semibold">Back</button>
                         <button
-                          onClick={() => {
-                            // proceed to Review & Confirm
-                            setStep(5);
-                          }}
-                          style={{
-                            padding: '8px 24px',
-                            borderRadius: 8,
-                            background: '#1e293b',
-                            color: 'white',
-                            border: 'none'
-                          }}
+                          onClick={() => setStep(5)}
+                          className="px-6 py-2 rounded-lg bg-gray-800 text-white font-semibold"
                         >
                           Next: Review
                         </button>
@@ -1590,24 +997,15 @@ export default function AppWithHeroPage() {
 
                 {step === 5 && (
                   <div>
-                    <h2 style={{ fontSize: 24, fontWeight: 600, color: '#1e293b', marginBottom: 24 }}>
-                      Review & Confirm
-                    </h2>
-
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))', gap: 24 }}>
+                    <h2 className="text-2xl font-semibold text-gray-800 mb-6">Review &amp; Confirm</h2>
+                    <div className="grid md:grid-cols-2 gap-6">
                       <div>
-                        <ReviewPanel product={product} color={color} size={size} position={position} chosenTemplate={chosenTemplate} personalText={personalText} selectedIcon={selectedIcon} onEdit={() => setStep(4)} onSubmit={() => { /* no-op here; submission handled below */ }} />
+                        <ReviewPanel product={product} color={color} size={size} position={position} chosenTemplate={chosenTemplate} personalText={personalText} selectedIcon={selectedIcon} onEdit={() => setStep(4)} onSubmit={() => {}} />
                       </div>
-
                       <div>
-
-
-                        {/* Customer info form */}
-                        <div style={{ padding: 12, borderRadius: 8, background: 'white', border: '1px solid #e6eef6' }}>
-                          <h3 style={{ margin: 0, fontSize: 14, fontWeight: 600, color: '#334155', marginBottom: 8 }}>Your Info</h3>
-
+                        <div className="p-3 rounded-lg bg-white border border-gray-200">
+                          <h3 className="text-sm font-semibold text-gray-700 mb-2">Your Info</h3>
                           <CustomerForm onSubmit={(customer) => {
-                            // construct queue job
                             const job = {
                               id: `${Date.now()}`,
                               product: product?.name || productId,
@@ -1622,18 +1020,13 @@ export default function AppWithHeroPage() {
                               createdAt: new Date().toISOString()
                             };
                             setQueue(prev => [job, ...prev]);
-                            // go to queue page
                             setStep(6);
                           }} />
                         </div>
                       </div>
                     </div>
-
-                    <div style={{ marginTop: 24 }}>
-                      <PrintQueue
-                        queue={queue}
-                        onClearQueue={() => setQueue([])}
-                      />
+                    <div className="mt-6">
+                      <PrintQueue queue={queue} onClearQueue={() => setQueue([])} />
                     </div>
                   </div>
                 )}
@@ -1653,8 +1046,7 @@ export default function AppWithHeroPage() {
             </div>
           </div>
         </div>
-
-        <div style={{ textAlign: 'center', fontSize: 14, color: '#64748b' }}>
+        <div className="text-center text-sm text-gray-400 mt-6">
           <p>Aptos Lab Merch designer • Create personalized products in minutes</p>
         </div>
       </div>

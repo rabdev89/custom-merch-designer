@@ -318,7 +318,7 @@ export default function App(){
     } else if(!templatesForProduct.length) {
       setTemplateId('');
     }
-  }, [productId]);
+  }, [productId, product, color, size, position, templateId]);
 
   // use templates for current product
   const templatesForProduct = getTemplatesForProduct(productId);
@@ -347,86 +347,45 @@ export default function App(){
     alert('Design queued for print!');
   }
 
-  const stepButtonStyle = (isActive, isPast) => ({
-    padding: '8px 16px',
-    borderRadius: 8,
-    fontWeight: 500,
-    whiteSpace: 'nowrap',
-    transition: 'all 0.2s',
-    border: 'none',
-    cursor: 'pointer',
-    background: isActive ? '#1e293b' : isPast ? '#dcfce7' : '#f1f5f9',
-    color: isActive ? 'white' : isPast ? '#166534' : '#64748b',
-    boxShadow: isActive ? '0 4px 6px -1px rgba(0,0,0,0.1)' : 'none'
-  });
+  // stepButtonStyle removed — using Tailwind classes instead
 
   return (
-    <div style={{
-      minHeight: '100vh',
-      background: 'linear-gradient(to bottom right, #f8fafc, #f1f5f9)',
-      padding: 24
-    }}>
-      <div style={{maxWidth: 1280, margin: '0 auto'}}>
-        <div style={{
-          background: 'white',
-          borderRadius: 16,
-          boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)',
-          padding: 32,
-          marginBottom: 24
-        }}>
-          <h1 style={{fontSize: 30, fontWeight: 700, color: '#1e293b', marginBottom: 24}}>
-            Made to Order
-          </h1>
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-6">
+      <div className="max-w-6xl mx-auto">
+        <div className="bg-white rounded-2xl shadow-lg p-8 mb-6">
+          <h1 className="text-2xl md:text-3xl font-bold text-slate-900 mb-6">Made to Order</h1>
 
-          <div style={{display: 'flex', gap: 8, marginBottom: 32, overflowX: 'auto', paddingBottom: 8}}>
+          <div className="flex gap-2 mb-8 overflow-x-auto pb-2">
             {['Select Product','Color & Size','Pick Template','Personalize','Review'].map((t,i)=> (
               <button 
                 key={t} 
                 onClick={()=>setStep(i+1)} 
-                style={stepButtonStyle(step===i+1, step > i+1)}
+                className={"whitespace-nowrap px-3 py-2 rounded-md font-medium text-sm " + (step===i+1 ? 'bg-slate-800 text-white shadow' : step > i+1 ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-50 text-slate-500')}
               >
                 {i+1}. {t}
               </button>
             ))}
           </div>
 
-          <div style={{display: 'grid', gridTemplateColumns: '1fr', gap: 32}}>
-            <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 32}}>
-              <div style={{gridColumn: 'span 2'}}>
+          <div className="grid gap-8">
+            <div className="grid md:grid-cols-3 gap-8">
+              <div className="md:col-span-2">
                 {step===1 && (
                   <div>
-                    <h2 style={{fontSize: 24, fontWeight: 600, color: '#1e293b', marginBottom: 24}}>
-                      Choose Your Product
-                    </h2>
-                    <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 24}}>
+                    <h2 className="text-xl font-semibold text-slate-900 mb-6">Choose Your Product</h2>
+                    <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 px-2">
                       {PRODUCTS.map(p=> (
                         <div 
-                          key={p.id} 
-                          style={{
-                            borderRadius: 12,
-                            border: productId===p.id ? '2px solid #1e293b' : '2px solid #e2e8f0',
-                            background: productId===p.id ? '#f8fafc' : 'white',
-                            boxShadow: productId===p.id ? '0 4px 6px -1px rgba(0,0,0,0.1)' : 'none',
-                            transition: 'all 0.2s',
-                            cursor: 'pointer'
-                          }}
+                          key={p.id}
                           onClick={()=>{setProductId(p.id); setStep(2);}}
+                          className={`rounded-lg transition-all cursor-pointer border ${productId===p.id ? 'border-slate-800 bg-slate-50 shadow' : 'border-gray-200 bg-white'} overflow-hidden flex flex-col`}
                         >
-                          <div style={{
-                            aspectRatio: '1',
-                            background: 'linear-gradient(to bottom right, #f8fafc, #f1f5f9)',
-                            borderTopLeftRadius: 12,
-                            borderTopRightRadius: 12,
-                            padding: 24,
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center'
-                          }}>
-                            <img src={p.image} alt={p.name} style={{width: '100%', height: '100%', objectFit: 'contain'}} />
+                          <div className="aspect-square bg-gradient-to-br from-gray-50 to-gray-100 p-4 flex items-center justify-center">
+                            <img src={p.image} alt={p.name} className="w-full h-full object-contain" />
                           </div>
-                          <div style={{padding: 16}}>
-                            <h3 style={{fontWeight: 600, color: '#1e293b', marginBottom: 4}}>{p.name}</h3>
-                            <p style={{fontSize: 14, color: '#64748b', textTransform: 'capitalize'}}>{p.type}</p>
+                          <div className="px-4 py-3 border-t">
+                            <h3 className="font-semibold text-slate-900 truncate">{p.name}</h3>
+                            <p className="text-sm text-slate-500 capitalize truncate">{p.type}</p>
                           </div>
                         </div>
                       ))}
