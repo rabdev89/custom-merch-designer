@@ -10,11 +10,26 @@
         "positions": [
           "front-center"
         ],
-        "maxWidth": 30,
-        "maxHeight": 20,
-        "previewCoords": { "x": 70, "y": 40},
+        "maxWidth": 8,
+        "maxHeight": 8,
+        "previewCoords": { "x": 63, "y": 33},
         "image": "/projects/test/templates/aptos-logo-1.png"
       },
+      {
+        "id": "jacket_mono_logo",
+        "name": "aptos-logo-3",
+        "event": "Corporate",
+        "canColor": true,
+        "canAddText": false,
+        "positions": [
+          "front-center"
+        ],
+        "maxWidth": 8,
+        "maxHeight": 8,
+        "previewCoords": { "x": 63, "y": 33},
+        "image": "/projects/test/templates/aptos-logo-3.png"
+      },
+
       {
         "id": "jacket_full_back_art",
         "name": "aptos-logo-2",
@@ -29,20 +44,7 @@
         "previewCoords": { "x": 50, "y": 35},
         "image": "/projects/test/templates/aptos-logo-2.png"
       },
-      {
-        "id": "jacket_mono_logo",
-        "name": "aptos-logo-3",
-        "event": "Corporate",
-        "canColor": true,
-        "canAddText": false,
-        "positions": [
-          "front-center"
-        ],
-        "maxWidth": 2,
-        "maxHeight": 2,
-        "previewCoords": { "x": 58, "y": 33},
-        "image": "/projects/test/templates/aptos-logo-3.png"
-      },
+      
       {
         "id": "jacket_mono_logo",
         "name": "aptos-logo-3",
