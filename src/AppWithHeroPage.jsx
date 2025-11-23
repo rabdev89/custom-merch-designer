@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import productData from "./data/aptos_products.json";
 import templateData from "./data/aptos_template.json";
@@ -167,158 +166,213 @@ function ProductGrid({ products, selectedId, onSelect, columns }) {
 
 
 
-function ProductPreview({ product, color, position, chosenTemplate, accent, selectedIcon, personalText, font, width, height = 300 }) {
-  // compute responsive width: if width provided use it, otherwise use 75% for small screens (<1200) or 50% for larger
-
-  let computedHeight = height;
-  if (chosenTemplate?.previewHeight) {
-    computedHeight = chosenTemplate.previewHeight;
+function getFixedPreviewDimensions(isSidebar = false) {
+  // Returns fixed width/height based on screen size and context
+  if (typeof window === 'undefined') {
+    return { width: 480, height: isSidebar ? 420 : 300 };
   }
-
-  let computedWidth = width;
-  if (!computedWidth) {
-    if (typeof window !== 'undefined') {
-      const vw = window.innerWidth;
-      const fraction = vw < 1200 ? 0.75 : 0.5;
-      // subtract some margin to avoid overflow
-      computedWidth = Math.max(320, Math.min((fraction * vw) - 80, 900));
-    } else {
-      computedWidth = 480;
+  
+  const vw = window.innerWidth;
+  
+  if (isSidebar) {
+    // Sidebar preview (desktop only - on mobile/tablet it's full width at top)
+    if (vw < 1024) {
+      // Mobile & Tablet: full width preview at top
+      return { width: Math.min(vw - 40, 480), height: 360 };
     }
+    // Desktop: sidebar on left
+    return { width: 400, height: 420 };
+  } else {
+    // Main preview (step 5 review - rarely used)
+    if (vw < 768) return { width: 300, height: 280 };
+    if (vw < 1024) return { width: 360, height: 320 };
+    return { width: 480, height: 300 };
   }
+}
 
-  // prefer position-specific preview image when available (e.g. back-full)
-  const pos = product?.customizablePositions?.find(p => p.id === position) || null;
-  // include both pos.image and pos.previewImage support
-  const posPreviewSrc = pos?.previewImage || pos?.image || null;
+function ProductPreview({ product, color, position, chosenTemplate, accent, selectedIcon, personalText, font, width, height = 300 }) {
+  const canvasRef = React.useRef(null);
+  const [isLoading, setIsLoading] = React.useState(true);
 
-  // pick color-specific product image if available
-  const colorImg = product?.variants?.colors?.find(c => c.id === color)?.image;
-  // prefer pos preview image, then color image, then base product image
-  const imgSrc = posPreviewSrc || colorImg || product.image;
+  React.useEffect(() => {
+    if (!canvasRef.current || !product) return;
 
-  // compute overlay coords: template previewCoords overrides position coords when present
-  const overlayCoords = chosenTemplate?.previewCoords || pos?.previewCoords || { x: 50, y: 50 };
+    let computedHeight = height;
+    if (chosenTemplate?.previewHeight) {
+      computedHeight = chosenTemplate.previewHeight;
+    }
 
-  // compute overlay W/H: template maxWidth/Height override position when present
-  const srcMaxW = chosenTemplate?.maxWidth ?? pos?.maxWidth ?? 12;
-  const srcMaxH = chosenTemplate?.maxHeight ?? pos?.maxHeight ?? 12;
-  const overlayPctW = Math.min(80, Math.max(12, srcMaxW * 4));
-  const overlayPctH = Math.min(80, Math.max(12, srcMaxH * 4));
+    let computedWidth = width;
+    if (!computedWidth) {
+      if (typeof window !== 'undefined') {
+        const vw = window.innerWidth;
+        const fraction = vw < 1200 ? 0.75 : 0.5;
+        computedWidth = Math.max(320, Math.min((fraction * vw) - 80, 900));
+      } else {
+        computedWidth = 480;
+      }
+    }
 
-  const textColor = contrastColor((product?.variants?.colors?.find(c => c.id === color)?.hex || '#ffffff').replace(/\s+/g, ''));
-  const personalTextColor = accent || textColor;
+    // Get position and template data
+    const pos = product?.customizablePositions?.find(p => p.id === position) || null;
+    const posPreviewSrc = pos?.previewImage || pos?.image || null;
+    const colorImg = product?.variants?.colors?.find(c => c.id === color)?.image;
+    const imgSrc = posPreviewSrc || colorImg || product.image;
+
+    // Overlay positioning
+    const overlayCoords = chosenTemplate?.previewCoords || pos?.previewCoords || { x: 50, y: 50 };
+    const srcMaxW = chosenTemplate?.maxWidth ?? pos?.maxWidth ?? 12;
+    const srcMaxH = chosenTemplate?.maxHeight ?? pos?.maxHeight ?? 12;
+    const overlayPctW = Math.min(80, Math.max(12, srcMaxW * 4));
+    const overlayPctH = Math.min(80, Math.max(12, srcMaxH * 4));
+
+    // Load images
+    const loadImage = (src) => new Promise((res) => {
+      if (!src) return res(null);
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = () => res(img);
+      img.onerror = () => res(null);
+      img.src = src;
+    });
+
+    Promise.all([
+      loadImage(imgSrc),
+      loadImage(chosenTemplate?.image || null)
+    ]).then(([baseImg, tplImg]) => {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+
+      const cw = Math.round(computedWidth * 0.82);
+      const ch = Math.round(computedHeight * 0.86);
+      
+      canvas.width = cw;
+      canvas.height = ch;
+
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+
+      // Draw base
+      if (baseImg) {
+        ctx.drawImage(baseImg, 0, 0, cw, ch);
+      } else {
+        ctx.fillStyle = toDisplayColor(product, color) || '#fff';
+        ctx.fillRect(0, 0, cw, ch);
+      }
+
+      // Compute overlay rect
+      const ow = Math.round((overlayPctW / 100) * cw);
+      const oh = Math.round((overlayPctH / 100) * ch);
+      const ox = Math.round((overlayCoords.x / 100) * cw - ow / 2);
+      const oy = Math.round((overlayCoords.y / 100) * ch - oh / 2);
+
+      // Draw template image
+      if (tplImg) {
+        const ar = tplImg.width / tplImg.height;
+        let dw = ow, dh = oh;
+        if (dw / dh > ar) {
+          dw = Math.round(dh * ar);
+        } else {
+          dh = Math.round(dw / ar);
+        }
+        const dx = ox + Math.round((ow - dw) / 2);
+        const dy = oy + Math.round((oh - dh) / 2);
+        ctx.drawImage(tplImg, dx, dy, dw, dh);
+      } else if (chosenTemplate?.svg) {
+        // For SVG templates, we'd need to convert to canvas or use a library
+        // For now, just draw a placeholder
+        ctx.fillStyle = accent || '#222';
+        ctx.fillRect(ox, oy, ow, oh);
+      }
+
+      // Draw icon
+      if (selectedIcon) {
+        ctx.fillStyle = accent || '#111';
+        ctx.font = `${Math.max(16, Math.round(Math.min(ow, oh) * 0.16))}px sans-serif`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(selectedIcon, ox + ow / 2, oy + oh * 0.25);
+      }
+
+      // Draw personal text
+      if (personalText) {
+        ctx.fillStyle = accent || contrastColor(toDisplayColor(product, color) || '#fff');
+        const fontSize = Math.max(12, Math.round(ow / 8));
+        ctx.font = `700 ${fontSize}px ${font || 'sans-serif'}`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        const lines = String(personalText).split('\n');
+        const lineHeight = fontSize * 1.2;
+        const startY = oy + oh / 2 - ((lines.length - 1) * lineHeight) / 2;
+        lines.forEach((line, i) => {
+          ctx.fillText(line, ox + ow / 2, startY + i * lineHeight);
+        });
+      }
+
+      setIsLoading(false);
+    });
+  }, [product, color, position, chosenTemplate, accent, selectedIcon, personalText, font, width, height]);
+
+  const computedHeight = height || 300;
+  const computedWidth = width || 480;
 
   return (
     <div style={{
-    borderRadius: 12,
+      borderRadius: 12,
       boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
       position: 'relative',
       display: 'flex',
       alignItems: 'center',
-      justifyContent: 'center'
+      justifyContent: 'center',
+      background: '#f5f5f5'
     }}>
-      <div style={{
-        width: Math.round(computedWidth * 0.82),
-        height: Math.round(computedHeight * 0.86),
-        borderRadius: 12,
-        position: 'relative',
-        overflow: 'hidden',
-        // use background color only if there's no image to display
-        background: imgSrc ? 'transparent' : toDisplayColor(product, color),
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center'
-      }}>
-        {imgSrc && (
-          <img
-            src={imgSrc}
-            alt={product.name}
-            style={{
-              position: 'absolute',
-              inset: 0,
-              width: '100%',
-              height: '100%',
-              objectFit: 'contain',
-              pointerEvents: 'none',
-              opacity: 0.98
-            }}
-            onError={(e) => {
-              // hide broken image and restore color background
-              e.currentTarget.style.display = 'none';
-              const parent = e.currentTarget.parentElement;
-              if (parent) parent.style.background = toDisplayColor(product, color);
-            }}
-          />
-        )}
-
+      {isLoading && (
         <div style={{
           position: 'absolute',
-          left: `${overlayCoords.x ?? 50}%`,
-          top: `${overlayCoords.y ?? 50}%`,
-          transform: 'translate(-50%,-50%)',
-          width: `${overlayPctW}%`,
-          height: `${overlayPctH}%`,
+          width: '100%',
+          height: '100%',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          pointerEvents: 'none'
+          zIndex: 10
         }}>
-          <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
-            <div style={{ width: '85%', height: '65%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <div style={{ width: '100%', height: '100%' }}>
-                {chosenTemplate?.image ? (
-                  <img src={chosenTemplate.image} alt={chosenTemplate.name} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
-                ) : (
-                  (chosenTemplate?.svg && chosenTemplate.svg(chosenTemplate.canColor ? accent : '#222')) || null
-                )}
-              </div>
-            </div>
-
-            {selectedIcon && (
-              <div style={{ marginTop: 6, color: accent, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                {ICON_LIBRARY.find(ic => ic.id === selectedIcon)?.svg}
-              </div>
-            )}
-
-            {personalText && (
-              <div style={{
-                marginTop: 8,
-                fontFamily: font,
-                fontWeight: 700,
-                fontSize: Math.max(10, Math.round(overlayPctW / 3)) + 'px',
-                color: personalTextColor,
-                textAlign: 'center',
-                whiteSpace: 'pre-wrap',
-                lineHeight: 1.05
-              }}>
-                {personalText}
-              </div>
-            )}
-          </div>
+          <div style={{ color: '#999' }}>Loading...</div>
         </div>
-      </div>
+      )}
+      <canvas
+        ref={canvasRef}
+        style={{
+          borderRadius: 12,
+          display: 'block',
+          maxWidth: '100%',
+          height: 'auto'
+        }}
+      />
     </div>
   );
 }
 
 function SidebarPreview({ product, color, position, chosenTemplate, accent, selectedIcon, personalText, font }) {
+  // Use fixed dimensions for sidebar
+  const fixedDims = getFixedPreviewDimensions(true);
+  
   return (
     <ProductPreview
-          product={product}
-          color={color}
-          position={position}
-          chosenTemplate={chosenTemplate}
-          accent={accent}
-          selectedIcon={selectedIcon}
-          personalText={personalText}
-          font={font}
-          height={420}
-        />
+      product={product}
+      color={color}
+      position={position}
+      chosenTemplate={chosenTemplate}
+      accent={accent}
+      selectedIcon={selectedIcon}
+      personalText={personalText}
+      font={font}
+      width={fixedDims.width}
+      height={fixedDims.height}
+    />
   );
 }
 
-function PrintQueue({ queue, onClearQueue }) {
+function PrintQueue({ queue, onClearQueue, onDownloadQueue }) {
   const [selectedJob, setSelectedJob] = React.useState(null);
   const [downloading, setDownloading] = React.useState(false);
 
@@ -329,6 +383,14 @@ function PrintQueue({ queue, onClearQueue }) {
       const templates = getTemplatesForProduct(job.productId) || [];
       const tpl = templates.find(t => t.id === job.template) || null;
 
+      // Use the same fixed dimensions as the preview for consistency
+      const fixedDims = getFixedPreviewDimensions(false);
+      const previewWidth = fixedDims.width;
+      const previewHeight = fixedDims.height;
+
+      // Scale factor for high-quality print output (e.g., 3x for 300dpi)
+      const SCALE = 3;
+
       // choose product base image (position preview -> color image -> base image)
       const pos = product?.customizablePositions?.find(p => p.id === job.position) || null;
       const baseSrc = pos?.previewImage || pos?.image || product?.image || null;
@@ -336,19 +398,19 @@ function PrintQueue({ queue, onClearQueue }) {
 
       // load images
       const loadImage = (src) => new Promise((res) => {
-            if (!src) return res(null);
-            const img = new Image();
-            img.crossOrigin = 'anonymous';
-            img.onload = () => res(img);
-            img.onerror = () => res(null);
-            img.src = src;
-          });
+        if (!src) return res(null);
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        img.onload = () => res(img);
+        img.onerror = () => res(null);
+        img.src = src;
+      });
 
       const [baseImg, tplImg] = await Promise.all([loadImage(baseSrc), loadImage(templateSrc)]);
 
-      // canvas dimensions
-      const cw = Math.max(800, baseImg?.naturalWidth || 1000);
-      const ch = Math.max(800, baseImg?.naturalHeight || 1000);
+      // canvas dimensions scaled for print quality
+      const cw = Math.max(800, (baseImg?.naturalWidth || 1000)) * SCALE;
+      const ch = Math.max(800, (baseImg?.naturalHeight || 1000)) * SCALE;
       const canvas = document.createElement('canvas');
       canvas.width = cw;
       canvas.height = ch;
@@ -467,7 +529,7 @@ function PrintQueue({ queue, onClearQueue }) {
             </div>
 
             <div className="flex gap-2">
-              <button onClick={() => setSelectedJob(j)} className="px-3 py-1 rounded-md border border-gray-200 bg-white">View</button>
+              <button onClick={() => setSelectedJob(j)} className="px-3 py-1 rounded-md border border-gray-200 bg-white  text-slate-700 font-medium hover:text-slate-900 transition-colors">View</button>
               <button onClick={() => {
                 if (!confirm('Remove this job from the queue?')) return;
                 onClearQueue && onClearQueue();
@@ -479,7 +541,7 @@ function PrintQueue({ queue, onClearQueue }) {
 
       {queue.length > 0 && (
         <div className="flex gap-2 mt-3">
-          <button onClick={() => { if (confirm('Clear entire queue?')) onClearQueue && onClearQueue(); }} className="flex-1 px-3 py-2 rounded-md border-2 border-gray-200 bg-white">Clear Queue</button>
+          <button onClick={() => { if (confirm('Clear entire queue?')) onClearQueue && onClearQueue(); }} className="flex-1 px-3 py-2 rounded-md border-2 border-gray-200 bg-white text-gray-500">Clear Queue</button>
         </div>
       )}
 
@@ -489,17 +551,17 @@ function PrintQueue({ queue, onClearQueue }) {
           <div className="flex justify-between items-center mb-2">
             <div className="font-bold">{selectedJob.product} — Details</div>
             <div className="flex gap-2">
-              <button onClick={() => { generateAndDownload(selectedJob); }} disabled={downloading} className="px-3 py-1 rounded-md bg-slate-800 text-white">{downloading ? 'Generating…' : 'Download Final Image'}</button>
-              <button onClick={() => setSelectedJob(null)} className="px-3 py-1 rounded-md border border-gray-200 bg-white">Close</button>
+              <button onClick={() => { generateAndDownload(selectedJob); }} disabled={downloading} className="px-3 py-1 rounded-md bg-slate-800 text-white font-medium hover:bg-slate-900 transition-colors disabled:opacity-50">{downloading ? 'Generating…' : 'Download Final Image'}</button>
+              <button onClick={() => setSelectedJob(null)} className="px-3 py-1 rounded-md border border-gray-200 bg-white text-slate-700 font-medium hover:text-slate-900 hover:border-gray-300 transition-colors">Close</button>
             </div>
           </div>
 
           <div className="grid md:grid-cols-2 gap-3">
             <div>
               <h4 className="text-xs text-gray-500 mb-2">Product Details</h4>
-              <div className="bg-slate-50 p-3 rounded-md">
+              <div className="bg-slate-50 p-3 text-gray-500 rounded-md">
                 <div><strong>{selectedJob.product}</strong></div>
-                <div className="text-sm text-gray-500">ID: {selectedJob.productId}</div>
+                <div className="text-sm ">ID: {selectedJob.productId}</div>
                 <div className="mt-2">Color: {selectedJob.color || '—'}</div>
                 <div>Size: {selectedJob.size || '—'}</div>
                 <div>Position: {selectedJob.position || '—'}</div>
@@ -509,9 +571,9 @@ function PrintQueue({ queue, onClearQueue }) {
               </div>
 
               <h4 className="text-xs text-gray-500 mt-3 mb-2">Customer Details</h4>
-              <div className="bg-slate-50 p-3 rounded-md">
+              <div className="bg-slate-50 p-3 text-gray-500 rounded-md">
                 <div><strong>{selectedJob.customer?.name}</strong></div>
-                <div className="text-sm text-gray-500">{selectedJob.customer?.email}</div>
+                <div className="text-sm 4400">{selectedJob.customer?.email}</div>
                 <div className="mt-2">{selectedJob.customer?.notes || '—'}</div>
               </div>
             </div>
@@ -755,8 +817,8 @@ function QueuePage({ queue, onClearQueue, onBack }) {
       <div className="flex justify-between items-center mb-3">
         <h2 className="text-lg font-bold text-slate-800">Print Queue</h2>
         <div className="flex gap-2">
-          <button onClick={onBack} className="px-3 py-2 rounded-md border border-gray-200 bg-white">← Continue Designing</button>
-          <button onClick={onClearQueue} className="px-3 py-2 rounded-md bg-red-600 text-white">Clear All</button>
+          <button onClick={onBack} className="px-3 py-2 rounded-md border border-gray-200 bg-white text-slate-700 font-medium hover:text-slate-900 transition-colors">← Continue Designing</button>
+          <button onClick={onClearQueue} className="px-3 py-2 rounded-md bg-red-600 text-white font-medium hover:bg-red-700 transition-colors">Clear All</button>
         </div>
       </div>
 
@@ -782,7 +844,7 @@ function CustomerForm({ onSubmit }) {
       <div className="grid gap-2">
         <input placeholder="Full name" value={name} onChange={e => setName(e.target.value)} className="text-gray-500 p-3 rounded-md border border-gray-200" />
         <input placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} className="text-gray-500 p-3 rounded-md border border-gray-200" />
-        <textarea placeholder="Notes (optional)" value={notes} onChange={e => setNotes(e.target.value)} className="text-gray-50 p-3 rounded-md border border-gray-200" rows={3} />
+        <textarea placeholder="Notes (optional)" value={notes} onChange={e => setNotes(e.target.value)} className="text-gray-500 p-3 rounded-md border border-gray-200" rows={3} />
         <div className="flex gap-2">
           <button type="submit" className="flex-1 px-4 py-2 rounded-md bg-green-600 text-white">Submit &amp; Queue</button>
         </div>
@@ -791,10 +853,20 @@ function CustomerForm({ onSubmit }) {
   );
 }
 
+// UUID generator utility
+function generateUUID() {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    const r = Math.random() * 16 | 0;
+    const v = c === 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
+}
+
 // --- Main App (uses components above) ---
 export default function AppWithHeroPage() {
   const [showHero, setShowHero] = useState(true);
   const [step, setStep] = useState(1);
+  const [showPastOrders, setShowPastOrders] = useState(false);
   const [productId, setProductId] = useState(PRODUCTS[0].id);
   const product = PRODUCTS.find(p => p.id === productId);
 
@@ -810,7 +882,30 @@ export default function AppWithHeroPage() {
   const [selectedIcon, _setSelectedIcon] = useState(null);
   const [accent, setAccent] = useState('#3b82f6');
 
-  const [queue, setQueue] = useState([]);
+  const [queue, setQueue] = useState(() => {
+    // Load queue from localStorage on init
+    if (typeof window !== 'undefined') {
+      try {
+        const saved = localStorage.getItem('tshirtDesignQueue');
+        return saved ? JSON.parse(saved) : [];
+      } catch (e) {
+        console.error('Failed to load queue from localStorage:', e);
+        return [];
+      }
+    }
+    return [];
+  });
+
+  // Persist queue to localStorage whenever it changes
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.setItem('tshirtDesignQueue', JSON.stringify(queue));
+      } catch (e) {
+        console.error('Failed to save queue to localStorage:', e);
+      }
+    }
+  }, [queue]);
 
   useEffect(() => {
     const availableColorIds = product?.variants?.colors?.map(c => c.id) || [];
@@ -846,10 +941,98 @@ export default function AppWithHeroPage() {
   }
   function goPrev() { setStep(s => Math.max(1, s - 1)); }
 
-
-
   if (showHero) {
     return <HeroPage onStartCreating={() => setShowHero(false)} />;
+  }
+
+  if (showPastOrders) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-6 px-4">
+        <div className="max-w-6xl mx-auto">
+          <div className="bg-white rounded-2xl shadow-xl p-6 mb-6">
+            <div className="flex justify-between items-center mb-6">
+              <h1 className="text-3xl font-bold text-gray-800">Your Past Orders</h1>
+              <button
+                onClick={() => setShowPastOrders(false)}
+                className="px-4 py-2 rounded-lg border-2 border-gray-200 bg-white text-slate-700 font-medium hover:text-slate-900 transition-colors"
+              >
+                ← Back to Designer
+              </button>
+            </div>
+
+            {queue.length === 0 ? (
+              <div className="text-center py-12">
+                <p className="text-gray-400 mb-4">No past orders found</p>
+                <button
+                  onClick={() => setShowPastOrders(false)}
+                  className="px-6 py-2 rounded-lg bg-gray-800 text-white font-semibold hover:bg-gray-900 transition-colors"
+                >
+                  Create New Design
+                </button>
+              </div>
+            ) : (
+              <div className="grid gap-4">
+                {queue.map(j => (
+                  <div key={j.id} className="bg-gradient-to-r from-gray-50 to-white border-2 border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                    <div className="grid md:grid-cols-4 gap-4 items-start">
+                      <div className="md:col-span-3">
+                        <div className="flex items-start gap-4">
+                          <div className="flex-none w-20">
+                            <img src={
+                              (PRODUCTS.find(p => p.id === j.productId)?.customizablePositions?.find(p => p.id === j.position)?.previewImage)
+                              || (PRODUCTS.find(p => p.id === j.productId)?.customizablePositions?.find(p => p.id === j.position)?.image)
+                              || PRODUCTS.find(p => p.id === j.productId)?.image
+                            } alt={j.product} className="w-20 h-20 object-contain" onError={(e) => e.currentTarget.style.display = 'none'} />
+                          </div>
+                          <div className="flex-1">
+                            <h3 className="text-lg font-semibold text-gray-800">{j.product}</h3>
+                            <p className="text-sm text-gray-500 mt-1">
+                              <strong>Order ID:</strong> {j.id}
+                            </p>
+                            <p className="text-sm text-gray-500">
+                              <strong>Customer:</strong> {j.customer?.name || 'N/A'}
+                            </p>
+                            <p className="text-xs text-gray-400 mt-2">
+                              {new Date(j.createdAt).toLocaleDateString()} at {new Date(j.createdAt).toLocaleTimeString()}
+                            </p>
+                            <div className="mt-2 flex flex-wrap gap-2">
+                              <span className="text-xs bg-gray-200 text-gray-700 px-2 py-1 rounded">{j.color || '—'}</span>
+                              <span className="text-xs bg-gray-200 text-gray-700 px-2 py-1 rounded">{j.size || '—'}</span>
+                              <span className="text-xs bg-gray-200 text-gray-700 px-2 py-1 rounded">{j.position || '—'}</span>
+                              {j.personalText && <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded">Text: {j.personalText}</span>}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="md:col-span-1 flex flex-col gap-2">
+                        <button
+                          onClick={() => {
+                            // TODO: Implement reorder functionality
+                            alert('Reorder feature coming soon!');
+                          }}
+                          className="px-3 py-2 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition-colors"
+                        >
+                          Reorder
+                        </button>
+                        <button
+                          onClick={() => {
+                            const url = `mailto:${j.customer?.email}?subject=Your Design Order ${j.id}`;
+                            window.location.href = url;
+                          }}
+                          className="px-3 py-2 rounded-lg border border-gray-300 bg-white text-gray-700 text-sm font-medium hover:bg-gray-50 transition-colors"
+                        >
+                          Share
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -858,185 +1041,248 @@ export default function AppWithHeroPage() {
         <div className="bg-white rounded-2xl shadow-xl p-1 mb-6">
           <div className="flex justify-between items-center mb-6">
             <h1 className="text-3xl font-bold text-gray-800">Aptos Lab Merch designer</h1>
-            <button
-              onClick={() => setShowHero(true)}
-              className="px-4 py-2 rounded-lg border-2 border-gray-200 bg-white text-gray-500 hover:text-gray-700 transition-colors"
-            >
-              ← Home
-            </button>
+            <div className="flex gap-2">
+              <button
+                onClick={() => setShowPastOrders(true)}
+                className="px-4 py-2 rounded-lg border-2 border-gray-200 bg-white text-slate-700 font-medium hover:text-slate-900 transition-colors"
+              >
+                📋 Past Orders ({queue.length})
+              </button>
+              <button
+                onClick={() => setShowHero(true)}
+                className="px-4 py-2 rounded-lg border-2 border-gray-200 bg-white text-gray-500 hover:text-gray-700 transition-colors"
+              >
+                ← Home
+              </button>
+            </div>
           </div>
 
           <StepProgress step={step} setStep={setStep} />
 
           <div className="grid gap-8">
-            <div className="grid md:grid-cols-2 gap-8">
-               {step !== 1 &&
-              <div className="preview-sidebar flex flex-col gap-9">
-                <SidebarPreview product={product} color={color} position={position} chosenTemplate={chosenTemplate} accent={accent} selectedIcon={selectedIcon} personalText={personalText} font={font} />
+            {/* Step 1 (Choose Product): Full-width grid OR two-column on desktop */}
+            {step === 1 ? (
+              <div className="grid lg:grid-cols-[1fr_1.2fr] gap-8">
+                {/* Left: Product Grid */}
+                <div className="main-content-area">
+                  <h2 className="text-2xl font-semibold text-gray-800 mb-6">Choose Your Product</h2>
+                  <ProductGrid products={PRODUCTS} selectedId={productId} onSelect={(id) => { setProductId(id); }} columns={4} />
+                  <div className="flex justify-center mt-6">
+                    <button
+                      onClick={() => {
+                        if (!productId) {
+                          alert('Please select a product first');
+                          return;
+                        }
+                        setStep(2);
+                      }}
+                      disabled={!productId}
+                      className={`px-6 py-2 rounded-lg font-semibold transition-colors ${productId ? 'bg-gray-800 text-white hover:bg-gray-900' : 'bg-gray-100 text-gray-400 cursor-not-allowed'}`}
+                    >
+                      Next: Color &amp; Size
+                    </button>
+                  </div>
+                </div>
+
+                {/* Right: Product Info Panel (desktop only) */}
+                <div className="hidden lg:flex flex-col gap-9">
+                  {productId && product ? (
+                    <div className="bg-white border border-gray-200 rounded-lg p-6">
+                      <h3 className="text-lg font-semibold text-gray-800 mb-4">{product.name}</h3>
+                      <div className="space-y-3">
+                        <div>
+                          <p className="text-sm text-gray-500">Type</p>
+                          <p className="text-sm font-medium text-gray-800 capitalize">{product.type}</p>
+                        </div>
+                        {product.variants?.colors && (
+                          <div>
+                            <p className="text-sm text-gray-500">Available Colors</p>
+                            <div className="flex flex-wrap gap-2 mt-2">
+                              {product.variants.colors.map(col => (
+                                <div
+                                  key={col.id}
+                                  className="w-8 h-8 rounded-md border border-gray-300"
+                                  style={{ background: toDisplayColor(product, col.id) }}
+                                  title={col.name}
+                                />
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                        {product.variants?.sizes && (
+                          <div>
+                            <p className="text-sm text-gray-500">Available Sizes</p>
+                            <p className="text-sm font-medium text-gray-800">{product.variants.sizes.join(', ')}</p>
+                          </div>
+                        )}
+                        {product.customizablePositions && (
+                          <div>
+                            <p className="text-sm text-gray-500">Customizable Positions</p>
+                            <p className="text-sm font-medium text-gray-800">{product.customizablePositions.length} position(s)</p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-200 rounded-lg p-6 flex items-center justify-center h-64">
+                      <p className="text-gray-400 text-center">Select a product to see details</p>
+                    </div>
+                  )}
+                </div>
               </div>
-              }
+            ) : (
+              /* Steps 2-6: Preview sidebar + main content */
+              <div className="grid lg:grid-cols-[1fr_1.2fr] gap-8">
+                {/* Preview sidebar - full width on mobile/tablet (top), sidebar on desktop (right) */}
+                <div className="order-first lg:order-last preview-sidebar flex flex-col gap-9">
+                  <SidebarPreview 
+                    product={product} 
+                    color={color} 
+                    position={position} 
+                    chosenTemplate={chosenTemplate} 
+                    accent={accent} 
+                    selectedIcon={selectedIcon} 
+                    personalText={personalText} 
+                    font={font} 
+                  />
+                </div>
 
-              <div className="main-content-area">
-                {step === 1 && (
-                  <div>
-                    <h2 className="text-2xl font-semibold text-gray-800 mb-6">Choose Your Product</h2>
-                    <ProductGrid products={PRODUCTS} selectedId={productId} onSelect={(id) => { setProductId(id); }} columns={4} />
-                    <div className="flex justify-center mt-6">
-                      <button
-                        onClick={() => {
-                          if (!productId) {
-                            alert('Please select a product first');
-                            return;
-                          }
-                          setStep(2);
-                        }}
-                        disabled={!productId}
-                        className={`px-6 py-2 rounded-lg font-semibold transition-colors ${productId ? 'bg-gray-800 text-white hover:bg-gray-900' : 'bg-gray-100 text-gray-400 cursor-not-allowed'}`}
-                      >
-                        Next: Color &amp; Size
-                      </button>
-                    </div>
-                  </div>
-                )}
-
-                {step === 2 && (
-                  <div>
-                    <h2 className="text-2xl font-semibold text-gray-800 mb-6">Customize Options</h2>
-                    <div className="bg-gray-50 p-6 rounded-xl mb-6">
-                      <ColorPicker product={product} color={color} setColor={setColor} />
-                      <div className="h-3" />
-                      <SizePicker product={product} size={size} setSize={setSize} />
-                      <div className="h-3" />
-                      <PositionPicker product={product} position={position} setPosition={setPosition} />
-                    </div>
-                    <div className="flex gap-3">
-                      <button onClick={goPrev} className="px-6 py-2 rounded-lg border-2 border-gray-300 bg-white text-gray-700 font-semibold">Back</button>
-                      <button onClick={goNext} className="px-6 py-2 rounded-lg bg-gray-800 text-white font-semibold">Next: Templates</button>
-                    </div>
-                  </div>
-                )}
-
-                {step === 3 && (
-                  <div>
-                    <h2 className="text-2xl font-semibold text-gray-800 mb-6">Choose a Template</h2>
-                    {!position && (
-                      <div className="mb-4 text-gray-400">Select a design position first to see templates.</div>
-                    )}
-                    {filteredTemplates.length === 0 ? (
-                      <div className="p-5 rounded-xl bg-white border border-dashed border-gray-200 text-gray-400">No templates available for this product / position.</div>
-                    ) : (
-                      <TemplateGallery templates={filteredTemplates} templateId={templateId} onSelect={setTemplateId} accent={accent} />
-                    )}
-                    <div className="flex gap-3 mt-3">
-                      <button onClick={goPrev} className="px-6 py-2 rounded-lg border-2 border-gray-300 bg-white text-gray-700 font-semibold">Back</button>
-                      <button
-                        onClick={() => {
-                          if (!templateId) return alert('Pick a template first');
-                          const tpl = templatesForProduct.find(t => t.id === templateId);
-                          if (tpl && tpl.canAddText === false) {
-                            setStep(5);
-                          } else {
-                            setStep(4);
-                          }
-                        }}
-                        disabled={!templateId}
-                        className={`px-6 py-2 rounded-lg font-semibold transition-colors ${templateId ? 'bg-gray-800 text-white hover:bg-gray-900' : 'bg-gray-100 text-gray-400 cursor-not-allowed'}`}
-                      >
-                        Next
-                      </button>
-                    </div>
-                  </div>
-                )}
-
-                {step === 4 && (
-                  <div>
-                    <h2 className="text-2xl font-semibold text-gray-900 mb-6">Personalize Your Design</h2>
-                    <div className="grid gap-3">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Add Text</label>
-                        <input
-                          value={personalText}
-                          onChange={e => setPersonalText(e.target.value)}
-                          placeholder="Enter your text"
-                          className="w-full px-3 py-2 rounded-lg border border-gray-200 text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-violet-400"
-                        />
+                {/* Main content area - full width, or left column on desktop */}
+                <div className="main-content-area">
+                  {step === 2 && (
+                    <div>
+                      <h2 className="text-2xl font-semibold text-gray-800 mb-6">Customize Options</h2>
+                      <div className="bg-gray-50 p-6 rounded-xl mb-6">
+                        <ColorPicker product={product} color={color} setColor={setColor} />
+                        <div className="h-3" />
+                        <SizePicker product={product} size={size} setSize={setSize} />
+                        <div className="h-3" />
+                        <PositionPicker product={product} position={position} setPosition={setPosition} />
                       </div>
-                      {/* <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Font</label>
-                        <select
-                          value={font}
-                          onChange={e => setFont(e.target.value)}
-                          className="w-full px-3 py-2 rounded-lg border border-gray-200 text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-violet-400"
-                        >
-                          {['Inter', 'Georgia', 'Montserrat', 'Pacifico'].map(f => <option key={f} value={f}>{f}</option>)}
-                        </select>
-                      </div> */}
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Accent Color</label>
-                        <input type="color" value={accent} onChange={e => setAccent(e.target.value)} className="w-20 h-10 border-none p-0 bg-transparent" />
+                      <div className="flex gap-3">
+                        <button onClick={goPrev} className="px-6 py-2 rounded-lg border-2 border-gray-300 bg-white text-gray-700 font-semibold">Back</button>
+                        <button onClick={goNext} className="px-6 py-2 rounded-lg bg-gray-800 text-white font-semibold">Next: Templates</button>
                       </div>
+                    </div>
+                  )}
+
+                  {step === 3 && (
+                    <div>
+                      <h2 className="text-2xl font-semibold text-gray-800 mb-6">Choose a Template</h2>
+                      {!position && (
+                        <div className="mb-4 text-gray-400">Select a design position first to see templates.</div>
+                      )}
+                      {filteredTemplates.length === 0 ? (
+                        <div className="p-5 rounded-xl bg-white border border-dashed border-gray-200 text-gray-400">No templates available for this product / position.</div>
+                      ) : (
+                        <TemplateGallery templates={filteredTemplates} templateId={templateId} onSelect={setTemplateId} accent={accent} />
+                      )}
                       <div className="flex gap-3 mt-3">
                         <button onClick={goPrev} className="px-6 py-2 rounded-lg border-2 border-gray-300 bg-white text-gray-700 font-semibold">Back</button>
                         <button
-                          onClick={() => setStep(5)}
-                          className="px-6 py-2 rounded-lg bg-gray-800 text-white font-semibold"
+                          onClick={() => {
+                            if (!templateId) return alert('Pick a template first');
+                            const tpl = templatesForProduct.find(t => t.id === templateId);
+                            if (tpl && tpl.canAddText === false) {
+                              setStep(5);
+                            } else {
+                              setStep(4);
+                            }
+                          }}
+                          disabled={!templateId}
+                          className={`px-6 py-2 rounded-lg font-semibold transition-colors ${templateId ? 'bg-gray-800 text-white hover:bg-gray-900' : 'bg-gray-100 text-gray-400 cursor-not-allowed'}`}
                         >
-                          Next: Review
+                          Next
                         </button>
                       </div>
                     </div>
-                  </div>
-                )}
+                  )}
 
-                {step === 5 && (
-                  <div>
-                    <h2 className="text-2xl font-semibold text-gray-800 mb-6">Review &amp; Confirm</h2>
-                    <div className="grid md:grid-cols-2 gap-6">
-                      <div>
-                        <ReviewPanel product={product} color={color} size={size} position={position} chosenTemplate={chosenTemplate} personalText={personalText} selectedIcon={selectedIcon} onEdit={() => setStep(4)} onSubmit={() => {}} />
-                      </div>
-                      <div>
-                        <div className="p-3 rounded-lg bg-white border border-gray-200">
-                          <h3 className="text-sm font-semibold text-gray-700 mb-2">Your Info</h3>
-                          <CustomerForm onSubmit={(customer) => {
-                            const job = {
-                              id: `${Date.now()}`,
-                              product: product?.name || productId,
-                              productId: product?.id || productId,
-                              color: color || null,
-                              size: size || null,
-                              position: position || null,
-                              template: chosenTemplate?.id || templateId || null,
-                              personalText: personalText || '',
-                              selectedIcon: selectedIcon || null,
-                              customer,
-                              createdAt: new Date().toISOString()
-                            };
-                            setQueue(prev => [job, ...prev]);
-                            setStep(6);
-                          }} />
+                  {step === 4 && (
+                    <div>
+                      <h2 className="text-2xl font-semibold text-gray-900 mb-6">Personalize Your Design</h2>
+                      <div className="grid gap-3">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">Add Text</label>
+                          <input
+                            value={personalText}
+                            onChange={e => setPersonalText(e.target.value)}
+                            placeholder="Enter your text"
+                            className="w-full px-3 py-2 rounded-lg border border-gray-200 text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-violet-400"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">Accent Color</label>
+                          <input type="color" value={accent} onChange={e => setAccent(e.target.value)} className="w-20 h-10 border-none p-0 bg-transparent" />
+                        </div>
+                        <div className="flex gap-3 mt-3">
+                          <button onClick={goPrev} className="px-6 py-2 rounded-lg border-2 border-gray-300 bg-white text-gray-700 font-semibold">Back</button>
+                          <button
+                            onClick={() => setStep(5)}
+                            className="px-6 py-2 rounded-lg bg-gray-800 text-white font-semibold"
+                          >
+                            Next: Review
+                          </button>
                         </div>
                       </div>
                     </div>
-                    <div className="mt-6">
-                      <PrintQueue queue={queue} onClearQueue={() => setQueue([])} />
+                  )}
+
+                  {step === 5 && (
+                    <div>
+                      <h2 className="text-2xl font-semibold text-gray-800 mb-6">Review &amp; Confirm</h2>
+                      <div className="grid lg:grid-cols-2 gap-6">
+                        <div>
+                          <ReviewPanel product={product} color={color} size={size} position={position} chosenTemplate={chosenTemplate} personalText={personalText} selectedIcon={selectedIcon} onEdit={() => setStep(4)} onSubmit={() => {}} />
+                        </div>
+                        <div>
+                          <div className="p-3 rounded-lg bg-white border border-gray-200">
+                            <h3 className="text-sm font-semibold text-gray-700 mb-2">Your Info</h3>
+                            <CustomerForm onSubmit={(customer) => {
+                              const job = {
+                                id: generateUUID(),
+                                product: product?.name || productId,
+                                productId: product?.id || productId,
+                                color: color || null,
+                                size: size || null,
+                                position: position || null,
+                                template: chosenTemplate?.id || templateId || null,
+                                templateName: chosenTemplate?.name || null,
+                                personalText: personalText || '',
+                                selectedIcon: selectedIcon || null,
+                                accent: accent || '#3b82f6',
+                                font: font || 'Montserrat',
+                                customer: {
+                                  name: customer.name,
+                                  email: customer.email,
+                                  notes: customer.notes || ''
+                                },
+                                createdAt: new Date().toISOString()
+                              };
+                              setQueue(prev => [job, ...prev]);
+                              setStep(6);
+                            }} />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="mt-6">
+                        <PrintQueue queue={queue} onClearQueue={() => setQueue([])} />
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )}
 
-                {step === 6 && (
-                  <div>
-                    <QueuePage
-                      queue={queue}
-                      onClearQueue={() => setQueue([])}
-                      onBack={() => setStep(1)}
-                    />
-                  </div>
-                )}
+                  {step === 6 && (
+                    <div>
+                      <QueuePage
+                        queue={queue}
+                        onClearQueue={() => setQueue([])}
+                        onBack={() => setStep(1)}
+                      />
+                    </div>
+                  )}
+                </div>
               </div>
-
-
-            </div>
+            )}
           </div>
         </div>
         <div className="text-center text-sm text-gray-400 mt-6">

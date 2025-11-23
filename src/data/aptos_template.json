@@ -70,9 +70,9 @@
         "positions": [
           "front-hoodie"
         ],
-        "maxWidth": 2,
+        "maxWidth": 6,
         "maxHeight": 10,
-        "previewCoords": { "x": 55, "y": 33},
+        "previewCoords": { "x": 66, "y": 35},
         "image": "/projects/test/templates/aptos-logo-1.png"
       },
       {
@@ -98,9 +98,9 @@
         "positions": [
           "front-hoodie"
         ],
-        "maxWidth": 2,
+         "maxWidth": 6,
         "maxHeight": 10,
-        "previewCoords": { "x": 55, "y": 33},
+        "previewCoords": { "x": 62, "y": 35},
         "image": "/projects/test/templates/aptos-logo-2.png"
       },
 
@@ -126,11 +126,15 @@
         "canColor": true,
         "canAddText": false,
         "positions": [
-          "back-hoodie",
           "front-hoodie"
         ],
+       "maxWidth": 6,
+        "maxHeight": 10,
+        "previewCoords": { "x": 62, "y": 35},
         "image": "/projects/test/templates/aptos-logo-3.png"
       },
+
+      
       {
         "id": "hoodie-aptos-logo-sleeves-2",
         "name": "aptos-logo-sleeves-2",
@@ -165,6 +169,9 @@
         "positions": [
           "back-hoodie"
         ],
+        "maxWidth": 13,
+        "maxHeight": 13,
+        "previewCoords": { "x": 50, "y": 56},
         "image": "/projects/test/templates/no_noise.png"
       }
     ],
