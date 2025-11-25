@@ -523,7 +523,7 @@ function PrintQueue({ queue, onClearQueue, onDownloadQueue }) {
             </div>
 
             <div className="flex-1">
-              <div className="font-semibold">{j.product}</div>
+              <div className="font-semibold text-xs text-gray-500">{j.product}</div>
               <div className="text-xs text-gray-500">{j.color || '—'} • {j.size || '—'}</div>
               <div className="text-xs text-gray-400">{new Date(j.createdAt).toLocaleString()}</div>
             </div>
@@ -561,7 +561,7 @@ function PrintQueue({ queue, onClearQueue, onDownloadQueue }) {
               <h4 className="text-xs text-gray-500 mb-2">Product Details</h4>
               <div className="bg-slate-50 p-3 text-gray-500 rounded-md">
                 <div><strong>{selectedJob.product}</strong></div>
-                <div className="text-sm ">ID: {selectedJob.productId}</div>
+                <div className="text-sm text-gray-500">ID: {selectedJob.productId}</div>
                 <div className="mt-2">Color: {selectedJob.color || '—'}</div>
                 <div>Size: {selectedJob.size || '—'}</div>
                 <div>Position: {selectedJob.position || '—'}</div>
@@ -573,7 +573,7 @@ function PrintQueue({ queue, onClearQueue, onDownloadQueue }) {
               <h4 className="text-xs text-gray-500 mt-3 mb-2">Customer Details</h4>
               <div className="bg-slate-50 p-3 text-gray-500 rounded-md">
                 <div><strong>{selectedJob.customer?.name}</strong></div>
-                <div className="text-sm 4400">{selectedJob.customer?.email}</div>
+                <div className="text-sm text-gray-500">{selectedJob.customer?.email}</div>
                 <div className="mt-2">{selectedJob.customer?.notes || '—'}</div>
               </div>
             </div>
@@ -730,7 +730,7 @@ function TemplateGallery({ templates, templateId, onSelect }) {
             </div>
 
             <div className="text-sm font-semibold text-slate-800 w-full">{t.name || (t.image && t.image.split('/').pop())}</div>
-            {(t.maxWidth || t.maxHeight) && <div className="text-xs text-gray-500">{t.maxWidth || '—'}×{t.maxHeight || '—'}</div>}
+            {(t.maxWidth || t.maxHeight) && <div className="text-xs text-gray-500">{t.maxWidth || '—'}</div>}
           </button>
         );
       })}
@@ -740,29 +740,7 @@ function TemplateGallery({ templates, templateId, onSelect }) {
 
 
 function PersonalizeForm({ personalText, setPersonalText, font, setFont, accent, setAccent }) {
-      {/* <div>
-        <label style={{display: 'block', fontSize: 14, fontWeight: 500, color: '#334155', marginBottom: 8}}>
-          Add Patch / Icon
-        </label>
-        <div style={{display: 'flex', gap: 12}}>
-          {ICON_LIBRARY.map(ic=> (
-            <button 
-              key={ic.id} 
-              onClick={()=>setSelectedIcon(selectedIcon===ic.id? null: ic.id)} 
-              style={{
-                padding: 12,
-                borderRadius: 8,
-                border: selectedIcon===ic.id ? '2px solid #1e293b' : '2px solid #e2e8f0',
-                background: selectedIcon===ic.id ? '#f8fafc' : 'white',
-                cursor: 'pointer'
-              }}
-              title={ic.label}
-            >
-              {ic.svg}
-            </button>
-          ))}
-        </div>
-      </div> */}
+      
   return (
     <div className="grid gap-4">
       <div>
@@ -804,7 +782,7 @@ function ReviewPanel({ product, color, size, position, chosenTemplate, personalT
         <div className="flex justify-between"><span className="text-sm text-gray-500">Icon:</span><span className="font-semibold text-slate-800">{selectedIcon || '—'}</span></div>
       </div>
       <div className="flex gap-3">
-        <button onClick={onEdit} className="text-gray-700 flex-1 px-4 py-3 rounded-md border-2 border-gray-200 bg-white">Edit Design</button>
+        <button onClick={onEdit} className="text-gray-700 flex-1 px-4 py-3 rounded-md border-2 border-gray-200 bg-white hover:bg-gray-50 transition-colors font-medium">Edit Design</button>
       </div>
     </div>
   );
@@ -842,11 +820,11 @@ function CustomerForm({ onSubmit }) {
       onSubmit({ name, email, notes });
     }}>
       <div className="grid gap-2">
-        <input placeholder="Full name" value={name} onChange={e => setName(e.target.value)} className="text-gray-500 p-3 rounded-md border border-gray-200" />
-        <input placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} className="text-gray-500 p-3 rounded-md border border-gray-200" />
-        <textarea placeholder="Notes (optional)" value={notes} onChange={e => setNotes(e.target.value)} className="text-gray-500 p-3 rounded-md border border-gray-200" rows={3} />
+        <input placeholder="Full name" value={name} onChange={e => setName(e.target.value)} className="text-gray-900 p-3 rounded-md border border-gray-200" />
+        <input placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} className="text-gray-900 p-3 rounded-md border border-gray-200" />
+        <textarea placeholder="Notes (optional)" value={notes} onChange={e => setNotes(e.target.value)} className="text-gray-900 p-3 rounded-md border border-gray-200" rows={3} />
         <div className="flex gap-2">
-          <button type="submit" className="flex-1 px-4 py-2 rounded-md bg-green-600 text-white">Submit &amp; Queue</button>
+          <button type="submit" className="flex-1 px-4 py-2 rounded-md bg-green-600 text-white font-medium hover:bg-green-700 transition-colors">Submit &amp; Queue</button>
         </div>
       </div>
     </form>
@@ -1233,7 +1211,24 @@ export default function AppWithHeroPage() {
                       <h2 className="text-2xl font-semibold text-gray-800 mb-6">Review &amp; Confirm</h2>
                       <div className="grid lg:grid-cols-2 gap-6">
                         <div>
-                          <ReviewPanel product={product} color={color} size={size} position={position} chosenTemplate={chosenTemplate} personalText={personalText} selectedIcon={selectedIcon} onEdit={() => setStep(4)} onSubmit={() => {}} />
+                          <ReviewPanel 
+                            product={product} 
+                            color={color} 
+                            size={size} 
+                            position={position} 
+                            chosenTemplate={chosenTemplate} 
+                            personalText={personalText} 
+                            selectedIcon={selectedIcon} 
+                            onEdit={() => {
+                              // Go back to appropriate step based on template settings
+                              if (chosenTemplate?.canAddText === false) {
+                                setStep(3); // Skip personalize step if text not allowed
+                              } else {
+                                setStep(4); // Go to personalize step
+                              }
+                            }} 
+                            onSubmit={() => {}} 
+                          />
                         </div>
                         <div>
                           <div className="p-3 rounded-lg bg-white border border-gray-200">
